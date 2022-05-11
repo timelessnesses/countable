@@ -162,3 +162,7 @@ cython_debug/
 # Alphabet .env production file
 # you know why
 .env.prod
+
+# .vscode config folder
+# due to we store target database credentials in .vscode/settings.json
+.vscode/

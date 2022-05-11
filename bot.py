@@ -13,15 +13,20 @@ logging.getLogger("discord").setLevel(logging.WARNING)  # mute
 bot = commands.Bot(command_prefix="a!")
 bot.log = logging.getLogger("AlphabetBot")
 bot.log.setLevel(logging.INFO)
-bot.db = asyncio.run(
-    EasySQL().connect(
+
+if os.environ.get("ALPHABET_URI"):  # exists
+    args = dict(
+        dsn=os.environ["ALPHABET_URI"],
+    )
+else:
+    args = dict(
         host=os.environ["ALPHABET_DB_HOST"],
-        port=os.environ["ALPHABET_DB_PORT"],
         user=os.environ["ALPHABET_DB_USER"],
         password=os.environ["ALPHABET_DB_PASSWORD"],
-        database=os.environ["ALPHABET_DB_DATABASE"],
+        database=os.environ["ALPHABET_DB_NAME"],
     )
-)
+
+bot.db = asyncio.run(EasySQL().connect(**args))
 
 
 @bot.event
@@ -36,7 +41,8 @@ async def on_ready():
 
 async def main():
     try:
-        while True:
+        started = False
+        while not started:
             async with bot:
                 for extension in os.listdir("src"):
                     if extension.endswith(".py") and not extension.startswith("_"):
@@ -45,6 +51,7 @@ async def main():
                 await bot.load_extension("jishaku")
                 bot.log.info("Loaded jishaku")
                 await bot.start(os.environ["ALPHABET_TOKEN"])
+                started = True  # break loop
     except KeyboardInterrupt:
         bot.log.info("Exiting...")
         await bot.db.close()
