@@ -6,7 +6,7 @@ authors = ["timelessnesses <mooping3roblox@gmail.com>"]
 license = "MPL-2.0"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.8"
 "discord.py" = {git = "https://github.com/Rapptz/discord.py"}
 orjson = "^3.6.8"
 aiohttp = {extras = ["speedups"], version = "^3.8.1"}
