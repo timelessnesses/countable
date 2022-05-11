@@ -11,6 +11,7 @@ import logging
 import os
 import subprocess
 import traceback
+
 from sql.sql import EasySQL
 
 logging.getLogger("discord").setLevel(logging.WARNING)  # mute
