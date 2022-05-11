@@ -3,9 +3,10 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
-import os
 import asyncio
 import logging
+import os
+
 from sql.sql import EasySQL
 
 logging.getLogger("discord").setLevel(logging.WARNING)  # mute

@@ -1,7 +1,9 @@
+import datetime
+
 import discord
 from discord.ext import commands
+
 from .utils import stuffs
-import datetime
 
 
 class AlphabetCount(commands.Cog):
@@ -221,6 +223,11 @@ class AlphabetCount(commands.Cog):
                 )
                 await self.db.execute(
                     """
-                    UPDATE counting SET previous_user_id = NULL WHERE guild_id = $1
-                    """
+                    UPDATE counting SET previous_person= NULL, current_alphabet = NULL, previous_alphabet = NULL, expected_next_alphabet = "A" WHERE guild_id = $1
+                    """,
+                    message.guild.id,
                 )
+                return
+        # -------------------------------------------------------
+        # Check if it is in order
+        self.is_ordered(previous_chain=previous, current_chain=message)
