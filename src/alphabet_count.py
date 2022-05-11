@@ -2,26 +2,27 @@ import datetime
 
 import discord
 from discord.ext import commands
-
+import string
 from .utils import stuffs
 
 
 class AlphabetCount(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.db = bot.db
 
     @commands.hybrid_group()
-    async def alphabet(self, ctx):
+    async def alphabet(self, ctx: commands.Context):
         if ctx.invoked_subcommand is None:
             await ctx.send_help(ctx.command)
 
     @alphabet.command()
-    async def setup(self, ctx):
-        is_setupped = await self.db.fetch(
+    async def setup(self, ctx: commands.Context):
+        is_setupped = await self.bot.db.fetch(
             "SELECT * FROM config WHERE guild_id = $1", ctx.guild.id
         )
-        if is_setupped["already_setupped"]:
+        if not is_setupped:
+            pass
+        elif is_setupped[0]["already_setupped"]:
             view = stuffs.Confirm()
             await ctx.send(
                 embed=discord.Embed(
@@ -32,7 +33,7 @@ class AlphabetCount(commands.Cog):
             )
             await view.wait()
             if view.value:
-                await self.db.execute(
+                await self.bot.db.execute(
                     "DELETE FROM config WHERE guild_id = $1", ctx.guild.id
                 )
                 await ctx.send(
@@ -82,7 +83,7 @@ class AlphabetCount(commands.Cog):
             else:
                 answers[i] = True if answer.content.lower() == "true" else False
             await a.delete()
-        await self.db.execute(
+        await self.bot.db.execute(
             """
             INSERT INTO config (guild_id, is_same_person, already_setupped, channel_id)
             VALUES ($1, $2, $3, $4)
@@ -97,11 +98,12 @@ class AlphabetCount(commands.Cog):
                 title="Setupped",
                 description=f"""
                 You have setupped this server.
-                Now {channel.mention} will be enforced to count alphabet.
+                Now {channel.content} will be enforced to count alphabet.
                 """,
                 colour=discord.Colour.green(),
             )
         )
+        channel = await ctx.guild.fetch_channel(int(channel.content.strip("<#>")))
         message = await channel.send(
             embed=discord.Embed(
                 title="Alphabet Count Rules",
@@ -115,7 +117,7 @@ class AlphabetCount(commands.Cog):
                 colour=discord.Colour.green(),
             )
         )
-        message2 = await ctx.send(
+        message2 = await channel.send(
             embed=discord.Embed(
                 title="Alphabet Count Howto",
                 description="""
@@ -148,86 +150,129 @@ class AlphabetCount(commands.Cog):
         await message.pin()
         await message2.pin()
 
+    def column(num, res=""):
+        return (
+            column((num - 1) // 26, "ABCDEFGHIJKLMNOPQRSTUVWXYZ"[(num - 1) % 26] + res)
+            if num > 0
+            else res
+        )
+
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         if message.author.bot:
             return
         if message.guild is None:
             return
-        if not message.channel.id == await self.db.fetch(
+        if not message.channel.id == await self.bot.db.fetch(
             "SELECT channel_id FROM config WHERE guild_id = $1", message.guild.id
         ):
             return
         # -------------------------------------------------------
         # Check if it is a same person
-        previous = await self.bot.fetch_user(
-            int(
-                await self.db.fetch(
-                    "SELECT previous_user_id FROM counting WHERE guild_id = $1",
-                    message.guild.id,
+        previous_counter = await self.bot.db.fetch(
+            "SELECT previous_counter FROM counting WHERE guild_id = $1",
+            message.guild.id,
+        )
+        if previous_counter is None:
+            return
+        if int(previous_counter["previous_counter"]) == message.author.id:
+            id = stuffs.random_id()
+            now = datetime.datetime.now()
+            await message.channel.send(
+                embed=discord.Embed(
+                    title="You can't chain alphabet count",
+                    colour=discord.Colour.red(),
+                )
+                .add_field(
+                    name="Reason",
+                    value="You can't chain alphabet count else this server will lose streak.",
+                )
+                .add_field(
+                    name="Log ID",
+                    value=id,
+                )
+                .add_field(
+                    name="Ruined by",
+                    value=message.author.mention,
+                )
+                .add_field(
+                    name="Time",
+                    value=now.strftime("%Y/%m/%d %H:%M:%S"),
+                )
+                .add_field(
+                    name="How to fix",
+                    value="You can't chain alphabet count else this server will lose streak.",
                 )
             )
-        )
-        if previous is not None:
-            if previous.id == message.author.id:
-                id = stuffs.random_id()
-                now = datetime.datetime.now()
-                await message.channel.send(
-                    embed=discord.Embed(
-                        title="You can't chain alphabet count",
-                        description=f'Now server\'s chain is ruine by {message.author.mention}. Fallback to "A"',
-                        colour=discord.Colour.red(),
-                    )
-                    .add_field(name="Ruined ID", value=id)
-                    .add_field(
-                        name="Ruined when", value=now.strftime("%Y/%m/%d %H:%M:%S")
-                    )
-                    .add_field(name="Ruined by", value=message.author.mention)
-                    .add_field(name="Reason", value="Same person")
-                    .add_field(
-                        name="Previous chain",
-                        value=[a async for a in await message.channel.history(limit=1)][
-                            0
-                        ].content,
-                    )
-                )
-                await self.db.execute(
-                    """
-                    INSERT INTO logger(
-                        id,
-                        guild_id,
-                        channel_id,
-                        ruined_chain_id,
-                        ruiner_id,
-                        ruined_jump_url,
-                        ruined_content,
-                        when_ruined,
-                        reason,
-                        previous_chain_id,
-
-                    )
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-                    """,
-                    id,
-                    message.guild.id,
-                    message.channel.id,
-                    message.id,
-                    message.author.id,
-                    message.jump_url,
-                    message.content,
-                    now,
-                    "Same person",
-                    [a async for a in await message.channel.history(limit=1)][
-                        0
-                    ].content,
-                )
-                await self.db.execute(
-                    """
-                    UPDATE counting SET previous_person= NULL, current_alphabet = NULL, previous_alphabet = NULL, expected_next_alphabet = "A" WHERE guild_id = $1
-                    """,
-                    message.guild.id,
-                )
-                return
+            await self.bot.db.execute(
+                "INSERT INTO logger (id, guild_id, channel_id, ruined_chain_id, ruiner_id, ruined_jump_url, ruined content, when ruined, reason, previous_chain_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+                id,
+                message.guild.id,
+                message.channel.id,
+                message.id,
+                message.author.id,
+                message.jump_url,
+                message.content,
+                now,
+                "You can't chain alphabet count else this server will lose streak.",
+                [a async for a in await message.channel.history(limit=1)][0].id,
+            )
+            return
         # -------------------------------------------------------
-        # Check if it is in order
-        self.is_ordered(previous_chain=previous, current_chain=message)
+        # Check if it is a chained message
+        expect = self.column(int(previous_counter["previous_counter"]) + 1)
+        if message.content != expect:
+            id = stuffs.random_id()
+            now = datetime.datetime.now()
+            await message.channel.send(
+                embed=discord.Embed(
+                    title="You broke the pattern",
+                    colour=discord.Colour.red(),
+                )
+                .add_field(
+                    name="Reason",
+                    value="You broke the pattern.",
+                )
+                .add_field(
+                    name="Log ID",
+                    value=id,
+                )
+                .add_field(
+                    name="Ruined by",
+                    value=message.author.mention,
+                )
+                .add_field(
+                    name="Time",
+                    value=now.strftime("%Y/%m/%d %H:%M:%S"),
+                )
+                .add_field(
+                    name="How to fix",
+                    value="You supposed to type `{}`".format(expect),
+                )
+            )
+            await self.bot.db.execute(
+                "INSERT INTO logger (id, guild_id, channel_id, ruined_chain_id, ruiner_id, ruined_jump_url, ruined content, when ruined, reason, previous_chain_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+                id,
+                message.guild.id,
+                message.channel.id,
+                message.id,
+                message.author.id,
+                message.jump_url,
+                message.content,
+                now,
+                "You broke the pattern.",
+                [a async for a in await message.channel.history(limit=1)][0].id,
+            )
+            return
+        # -------------------------------------------------------
+        # all condition were met so we can count
+        await self.bot.db.execute(
+            "UPDATE counting SET previous_counter = $1 WHERE guild_id = $2",
+            previous_counter["previous_counter"] + 1,
+            message.guild.id,
+        )
+        await message.add_reaction("✅")
+
+
+async def setup(bot: commands.Bot):
+    await bot.add_cog(AlphabetCount(bot))

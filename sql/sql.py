@@ -8,12 +8,8 @@ class EasySQL:
         self.db = None
         self.cursor = None
 
-    async def connect(
-        self, host, database, user, password
-    ) -> typing.Optional[asyncpg.connection.Connection]:
-        self.db = await asyncpg.create_pool(
-            host=host, database=database, user=user, password=password
-        )
+    async def connect(self, **kwargs) -> typing.Optional[asyncpg.connection.Connection]:
+        self.db = await asyncpg.create_pool(**kwargs)
         return self.db
 
     async def execute(self, query, *args) -> typing.Optional[dict]:
