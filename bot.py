@@ -13,8 +13,8 @@ import ssl
 import subprocess
 import traceback
 
-from sql.sql import EasySQL
 from server import start
+from sql.sql import EasySQL
 
 logging.getLogger("discord").setLevel(logging.WARNING)  # mute
 
