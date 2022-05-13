@@ -102,8 +102,9 @@ class events(commands.Cog):
                 [a async for a in history][0].id,
             )
             await self.bot.db.execute(
-                "UPDATE counting SET previous_person = $1 WHERE guild_id = $2",
+                "UPDATE counting SET previous_person = $1, count_number =  $2 WHERE guild_id = $3",
                 None,
+                0,
                 message.guild.id,
             )
             return
