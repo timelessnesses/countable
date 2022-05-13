@@ -7,10 +7,10 @@ from .utils import stuffs
 
 
 class events(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
-    def column(self, num, res=""):
+    def column(self, num, res="") -> str:
         return (
             self.column(
                 (num - 1) // 26,
@@ -21,7 +21,7 @@ class events(commands.Cog):
         )
 
     @commands.Cog.listener()
-    async def on_message(self, message: discord.Message):
+    async def on_message(self, message: discord.Message) -> None:
         if message.author.bot:
             return
         if message.guild is None:
