@@ -9,6 +9,8 @@ import asyncio
 import datetime
 import logging
 import os
+
+import ssl
 import subprocess
 import traceback
 
@@ -77,6 +79,11 @@ else:
         password=os.environ["ALPHABET_DB_PASSWORD"],
         database=os.environ["ALPHABET_DB_NAME"],
     )
+
+ssl_object = ssl.create_default_context()
+ssl_object.check_hostname = False
+ssl_object.verify_mode = ssl.CERT_NONE
+args["ssl"] = ssl_object
 
 
 @bot.event
