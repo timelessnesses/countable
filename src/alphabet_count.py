@@ -226,7 +226,6 @@ class AlphabetCount(commands.Cog):
             now = datetime.datetime.now()
             await message.channel.send(
                 embed=discord.Embed(
-                     
                     title="You broke the pattern",
                     colour=discord.Colour.red(),
                 )
