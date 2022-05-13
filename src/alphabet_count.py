@@ -2,7 +2,7 @@ import datetime
 
 import discord
 from discord.ext import commands
-import string
+
 from .utils import stuffs
 
 
