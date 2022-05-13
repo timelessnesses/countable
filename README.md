@@ -40,6 +40,7 @@ There's 2 types you can host this bot.
 
 ## Replit
 
+Clone my [repl](https://replit.com/@Mooping/alphabet-count-bot) is the easiest way but you can follow stuff below.  
 Clone my repository and tell replit to run the following command everytime repl starts up
 
 ```bash
