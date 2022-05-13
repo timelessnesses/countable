@@ -14,6 +14,7 @@ import subprocess
 import traceback
 
 from sql.sql import EasySQL
+from server import start
 
 logging.getLogger("discord").setLevel(logging.WARNING)  # mute
 
@@ -117,7 +118,7 @@ async def main():
                 log.info(
                     f"Started with version {bot.version_} and started at {bot.start_time}"
                 )
-
+                start()
                 await bot.start(os.environ["ALPHABET_TOKEN"])
                 started = True  # break loop
     except KeyboardInterrupt:
