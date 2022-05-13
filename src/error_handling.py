@@ -13,7 +13,7 @@ class Errors(commands.Cog):
     async def on_command_error(self, ctx: commands.Context, error: Exception) -> None:
         traceback.print_exception(type(error), error, error.__traceback__)
         if isinstance(error, commands.CommandNotFound):
-            matches = get_close_matches(ctx.invoked_with, ctx.bot.commands)
+            matches = get_close_matches(ctx.bot.commands, ctx.invoked_with)
             if len(matches) >= 2:
                 await ctx.send(
                     embed=discord.Embed(
