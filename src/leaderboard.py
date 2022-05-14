@@ -1,4 +1,5 @@
 from discord.ext import commands
+import string
 
 
 class Leaderboard(commands.Cog):
@@ -9,7 +10,7 @@ class Leaderboard(commands.Cog):
         return (
             self.column(
                 (num - 1) // 26,
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZ".lower()[(num - 1) % 26] + res,
+                string.ascii_lowercase[(num - 1) % 26] + res,
             )
             if num > 0
             else res
@@ -48,3 +49,11 @@ class Leaderboard(commands.Cog):
         embed.set_footer(
             text=f"{ctx.guild} is at currently at {self.prefix(i + 1)} and currently at character {self.column(server['chain_count'])}."
         )
+        await ctx.send(embed=embed)
+
+    @leaderboard.command()
+    async def by_contribution_alphabets():
+        """
+        Get letters count by alphabet ranked by most to the least in top 10!
+        """
+        pass
