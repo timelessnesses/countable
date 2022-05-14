@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 
 
@@ -28,7 +27,6 @@ class Leaderboard(commands.Cog):
         """
         Leaderboard command group
         """
-        pass
 
     @leaderboard.command()
     async def by_chain_count(self, ctx: commands.Bot):
