@@ -204,8 +204,6 @@ class events(commands.Cog):
                 return
         except IndexError:
             return
-
-        channel = await ctx.guild.fetch_channel(int(m[0]["channel_id"]))
         current_count = await self.bot.db.fetch(
             "SELECT * FROM counting WHERE guild_id = $1", ctx.guild.id
         )
