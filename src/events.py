@@ -107,7 +107,7 @@ class events(commands.Cog):
                 0,
                 message.guild.id,
             )
-            return
+            raise Exception("chain_error")
         # -------------------------------------------------------
         # Check if it is a chained message
         previous_count = await self.bot.db.fetch(
@@ -156,7 +156,7 @@ class events(commands.Cog):
                 "You broke the pattern.",
                 [a async for a in message.channel.history(limit=1)][0].id,
             )
-            return
+            raise Exception("pattern_error")
         # -------------------------------------------------------
         # all condition were met so we can count
         previous_number = await self.bot.db.fetch(
@@ -170,6 +170,32 @@ class events(commands.Cog):
             message.guild.id,
         )
         await message.add_reaction("✅")
+        if not (
+            await self.bot.db.fetch(
+                "SELECT * FROM user_stats WHERE user_id = $1", message.author.id
+            )
+        ):
+            await self.bot.db.execute(
+                "INSERT INTO user_stats (user_id, guild_id, count_number) VALUES ($1, $2, $3)",
+                message.author.id,
+                message.guild.id,
+                0,
+            )
+        count = (
+            await self.bot.db.fetch(
+                "SELECT * FROM user_stats WHERE user_id = $1", message.author.id
+            )
+        )[0]["count_number"] + 1
+        await self.bot.db.execute(
+            "UPDATE user_stats SET count_number = $1 WHERE user_id = $2 AND guild_id = $3",
+            count,
+            message.author.id,
+            message.guild.id,
+        )
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx: commands.Context, error: Exception):
+        await ctx.message.add_reaction("❌")
 
 
 async def setup(bot: commands.Bot):

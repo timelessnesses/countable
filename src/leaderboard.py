@@ -1,5 +1,6 @@
-from discord.ext import commands
 import string
+
+from discord.ext import commands
 
 
 class Leaderboard(commands.Cog):
@@ -56,4 +57,3 @@ class Leaderboard(commands.Cog):
         """
         Get letters count by alphabet ranked by most to the least in top 10!
         """
-        pass

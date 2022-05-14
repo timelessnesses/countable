@@ -21,4 +21,9 @@ CREATE TABLE IF NOT EXISTS counting(
     count_number BIGINT NOT NULL DEFAULT 0,
     count_channel_id BIGINT NOT NULL,
     previous_person BIGINT
+);
+CREATE TABLE IF NOT EXISTS user_stats(
+    user_id BIGSERIAL PRIMARY KEY,
+    alphabet_counts BIGINT NOT NULL DEFAULT 0,
+    ruined_counts BIGINT NOT NULL DEFAULT 0
 )
