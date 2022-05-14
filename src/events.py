@@ -224,6 +224,23 @@ class events(commands.Cog):
                 current_count[0]["count_number"],
                 ctx.guild.id,
             )
+        current_highest_chain = await self.bot.db.fetch("SELECT * FROM counting")
+        first_rank = sorted(
+            current_highest_chain, key=lambda x: x["longest_chain"], reverse=True
+        )[0]
+        if first_rank["longest_chain"] < current_count[0]["longest_chain"]:
+            await ctx.send(
+                embed=discord.Embed(
+                    title=f"This server has broke global streak that was made by {await self.bot.fetch_guild(first_rank['guild_id'])}",
+                    description=f"Previous world record is {first_rank['longest_chain']}. Now it is {current_count[0]['longest_chain']}. Congratulation! 🥳",
+                    colour=discord.Colour.green(),
+                )
+            )
+            await self.bot.db.execute(
+                "UPDATE counting SET longest_chain = $1 WHERE guild_id = $2",
+                current_count[0]["longest_chain"],
+                ctx.guild.id,
+            )
 
 
 async def setup(bot: commands.Bot):
