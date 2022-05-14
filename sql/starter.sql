@@ -20,7 +20,8 @@ CREATE TABLE IF NOT EXISTS counting(
     guild_id BIGSERIAL PRIMARY KEY,
     count_number BIGINT NOT NULL DEFAULT 0,
     count_channel_id BIGINT NOT NULL,
-    previous_person BIGINT
+    previous_person BIGINT,
+    longest_chain INT NOT NULL DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS user_stats(
     user_id BIGSERIAL PRIMARY KEY,

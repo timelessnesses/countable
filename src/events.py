@@ -196,6 +196,34 @@ class events(commands.Cog):
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error: Exception):
         await ctx.message.add_reaction("❌")
+        m = await self.bot.db.fetch(
+            "SELECT channel_id FROM config WHERE guild_id = $1", message.guild.id
+        )
+        try:
+            if not message.channel.id == int(m[0]["channel_id"]):
+                return
+        except IndexError:
+            return
+
+        channel = await ctx.guild.fetch_channel(int(m[0]["channel_id"]))
+        current_count = await self.bot.db.fetch(
+            "SELECT * FROM counting WHERE guild_id = $1", ctx.guild.id
+        )
+        if not current_count:
+            return
+        if current_count[0]["count_number"] > current_count[0]["longest_chain"]:
+            await ctx.send(
+                embed=discord.Embed(
+                    title="This server has broke personal streak",
+                    description=f"Your previous chain count is {current_count[0]['longest_chain']}. Now it is {current_count[0]['count_number']}. Congratulation! 🥳",
+                    colour=discord.Colour.green(),
+                )
+            )
+            await self.bot.db.execute(
+                "UPDATE counting SET longest_chain = $1 WHERE guild_id = $2",
+                current_count[0]["count_number"],
+                ctx.guild.id,
+            )
 
 
 async def setup(bot: commands.Bot):
