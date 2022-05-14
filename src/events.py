@@ -114,7 +114,7 @@ class events(commands.Cog):
             "SELECT count_number FROM counting WHERE guild_id = $1", message.guild.id
         )
         expect = self.column(int(previous_count[0]["count_number"]) + 1)
-        if message.content != expect:
+        if message.content.lower() != expect:
             id = stuffs.random_id()
             now = datetime.datetime.now()
             await message.channel.send(
