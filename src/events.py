@@ -204,6 +204,7 @@ class events(commands.Cog):
                 return
         except IndexError:
             return
+
         current_count = await self.bot.db.fetch(
             "SELECT * FROM counting WHERE guild_id = $1", ctx.guild.id
         )
