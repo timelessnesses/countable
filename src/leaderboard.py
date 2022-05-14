@@ -33,11 +33,18 @@ class Leaderboard(commands.Cog):
     @leaderboard.command()
     async def by_chain_count(self, ctx: commands.Bot):
         """
-        Get every server's alphabet chain count ranked by most to the least in top 10!
+        Get every server's alphabet chain count that wasn't ruined ranked by most to the least in top 10!
         """
-        servers = await self.bot.db.fetch("SELECT * FROM counting")
-        servers = sorted(servers, key=lambda x: x["chain_count"], reverse=True)[:10]
-        all_guilds = await self.bot.db.fetch("SELECT * FROM counting")
+        servers = sorted(
+            await self.bot.db.fetch("SELECT * FROM counting"),
+            key=lambda x: x["chain_count"],
+            reverse=True,
+        )[:10]
+        all_guilds = sorted(
+            await self.bot.db.fetch("SELECT * FROM counting"),
+            key=lambda x: x["chain_count"],
+            reverse=True,
+        )
         embed = discord.Embed(title="Top 10 Servers by Chain Count", color=0x00FF00)
         for i, server in enumerate(servers):
             embed.add_field(
@@ -57,3 +64,59 @@ class Leaderboard(commands.Cog):
         """
         Get letters count by alphabet ranked by most to the least in top 10!
         """
+        users = sorted(
+            await self.bot.db.fetch("SELECT * FROM user_stats"),
+            key=lambda x: x["count_number"],
+            reverse=True,
+        )[:10]
+        all_users = sorted(
+            await self.bot.db.fetch("SELECT * FROM user_stats"),
+            key=lambda x: x["count_number"],
+            reverse=True,
+        )
+        embed = discord.Embed(title="Top 10 Users by Alphabet Count", color=0x00FF00)
+        for i, user in enumerate(users):
+            embed.add_field(
+                name=f"{self.prefix(i + 1)}. {await self.bot.fetch_user(user['user_id'])}",
+                value=f"{user['count_number']} letters. (Currently at character {self.column(user['count_number'])})",
+            )
+        for i, user in enumerate(all_users):
+            if user["user_id"] == ctx.author.id:
+                break
+        embed.set_footer(
+            text=f"{ctx.author} is at currently at {self.prefix(i + 1)} and currently at character {self.column(user['count_number'])}."
+        )
+        await ctx.send(embed=embed)
+
+    @leaderboard.command()
+    async def by_longest_chain():
+        """
+        Get every server's alphabet chain count that's ruined ranked by most to the least in top 10!
+        """
+        servers = sorted(
+            await self.bot.db.fetch("SELECT * FROM counting"),
+            key=lambda x: x["longest_chain"],
+            reverse=True,
+        )[:10]
+        all_guilds = sorted(
+            await self.bot.db.fetch("SELECT * FROM counting"),
+            key=lambda x: x["longest_chain"],
+            reverse=True,
+        )
+        embed = discord.Embed(title="Top 10 Servers by Longest Chain", color=0x00FF00)
+        for i, server in enumerate(servers):
+            embed.add_field(
+                name=f"{self.prefix(i + 1)}. {await self.bot.fetch_guild(server['guild_id'])}",
+                value=f"{server['longest_chain']} characters. (Currently at character {self.column(server['longest_chain'])})",
+            )
+        for i, server in enumerate(all_guilds):
+            if server["guild_id"] == ctx.guild.id:
+                break
+        embed.set_footer(
+            text=f"{ctx.guild} is at currently at {self.prefix(i + 1)} and currently at character {self.column(server['longest_chain'])}."
+        )
+        await ctx.send(embed=embed)
+
+
+async def setup(bot: commands.Bot) -> None:
+    await bot.add_cog(Leaderboard(bot))
