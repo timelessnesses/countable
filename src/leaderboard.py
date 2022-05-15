@@ -60,7 +60,7 @@ class Leaderboard(commands.Cog):
         await ctx.send(embed=embed)
 
     @leaderboard.command()
-    async def by_contribution_alphabets():
+    async def by_contribution_alphabets(self, ctx: commands.Context):
         """
         Get letters count by alphabet ranked by most to the least in top 10!
         """
@@ -89,7 +89,7 @@ class Leaderboard(commands.Cog):
         await ctx.send(embed=embed)
 
     @leaderboard.command()
-    async def by_longest_chain():
+    async def by_longest_chain(self, ctx: commands.Context):
         """
         Get every server's alphabet chain count that's ruined ranked by most to the least in top 10!
         """

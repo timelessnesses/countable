@@ -107,7 +107,21 @@ async def main():
                         log.info(f"Loaded extension {extension[:-3]}")
                 await bot.load_extension("jishaku")
                 log.info("Loaded jishaku")
-                bot.db = await EasySQL().connect(**args)
+                try:
+                    bot.db = await EasySQL().connect(**args)
+                except ConnectionError:
+                    log.fatal("Failed to connect to database")
+                    log.fatal(traceback.format_exc())
+                    log.info("Trying to remove SSL context")
+                    args["ssl"] = None
+                    try:
+                        bot.db = await EasySQL().connect(**args)
+                    except ConnectionError:
+                        log.fatal("Failed to connect to database")
+                        log.fatal(traceback.format_exc())
+                        log.fatal("Exiting...")
+                        return
+                    log.info("Successfully connected to database")
                 log.info("Connected to database")
                 await bot.db.execute(open("sql/starter.sql", "r").read())
                 log.info("Executed starter sql")
@@ -118,7 +132,9 @@ async def main():
                 log.info(
                     f"Started with version {bot.version_} and started at {bot.start_time}"
                 )
-                start()
+                if os.environ.get("IS_REPLIT"):
+                    start()
+                    log.info("REPLIT detected opening webserver for recieve pinging")
                 await bot.start(os.environ["ALPHABET_TOKEN"])
                 started = True  # break loop
     except KeyboardInterrupt:

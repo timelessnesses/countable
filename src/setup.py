@@ -17,6 +17,7 @@ class setup_(commands.Cog, name="Setup"):
         return "🔨"
 
     @commands.hybrid_command()
+    @commands.has_permissions(administrator=True)
     async def setup(self, ctx: commands.Context) -> None:
         """
         Setup the alphabet counter

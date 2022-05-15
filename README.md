@@ -63,6 +63,7 @@ ALPHABET_DB_PASSWORD=<postgresql server password>
 ALPHABET_DB_NAME=<postgresql database name>
 ALPHABET_URI=<postgresql uri if you don't want to type stuff up there>
 ALPHABET_TOKEN=<bot token>
+IS_REPLIT=any value (this is for replit)
 ```
 
 Start repl up and you should be good to go(?)
