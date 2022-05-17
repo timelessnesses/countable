@@ -41,6 +41,9 @@ class setup_(commands.Cog, name="Setup"):
                 await self.bot.db.execute(
                     "DELETE FROM config WHERE guild_id = $1", ctx.guild.id
                 )
+                await self.bot.db.execute(
+                    "DELETE FROM counting WHERE guild_id = $1", ctx.guild.id
+                )
                 await ctx.send(
                     embed=discord.Embed(
                         title="Resetted",

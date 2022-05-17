@@ -2,10 +2,20 @@ import string
 
 from discord.ext import commands
 
+import discord
+
 
 class Leaderboard(commands.Cog):
+    """
+    Get a ranking of the top 10 users/servers!
+    """
+
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
+
+    @property
+    def display_emoji(self) -> str:
+        return "📊"
 
     def column(self, num: int, res="") -> str:
         return (
@@ -53,10 +63,15 @@ class Leaderboard(commands.Cog):
             )
         for i, server in enumerate(all_guilds):
             if server["guild_id"] == ctx.guild.id:
+                i_ = i
+                server_ = server
                 break
-        embed.set_footer(
-            text=f"{ctx.guild} is at currently at {self.prefix(i + 1)} and currently at character {self.column(server['chain_count'])}."
-        )
+        try:
+            embed.set_footer(
+                text=f"{ctx.guild} is at currently at {self.prefix(i_ + 1)} and currently at character {self.column(server_['chain_count'])}."
+            )
+        except UnboundLocalError:
+            pass
         await ctx.send(embed=embed)
 
     @leaderboard.command()
@@ -82,10 +97,15 @@ class Leaderboard(commands.Cog):
             )
         for i, user in enumerate(all_users):
             if user["user_id"] == ctx.author.id:
+                i_ = i
+                user_ = user
                 break
-        embed.set_footer(
-            text=f"{ctx.author} is at currently at {self.prefix(i + 1)} and currently at character {self.column(user['count_number'])}."
-        )
+        try:
+            embed.set_footer(
+                text=f"{ctx.author} is at currently at {self.prefix(i_ + 1)} and currently at character {self.column(user_['count_number'])}."
+            )
+        except UnboundLocalError:
+            pass
         await ctx.send(embed=embed)
 
     @leaderboard.command()
@@ -110,11 +130,16 @@ class Leaderboard(commands.Cog):
                 value=f"{server['longest_chain']} characters. (Currently at character {self.column(server['longest_chain'])})",
             )
         for i, server in enumerate(all_guilds):
-            if server["guild_id"] == ctx.guild.id:
+            if int(server["guild_id"]) == ctx.guild.id:
+                i_ = i
+                server_ = server
                 break
-        embed.set_footer(
-            text=f"{ctx.guild} is at currently at {self.prefix(i + 1)} and currently at character {self.column(server['longest_chain'])}."
-        )
+        try:
+            embed.set_footer(
+                text=f"{ctx.guild} is at currently at {self.prefix(i_ + 1)} and currently at character {self.column(server_['longest_chain'])}."
+            )
+        except UnboundLocalError:
+            pass
         await ctx.send(embed=embed)
 
 

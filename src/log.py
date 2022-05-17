@@ -3,8 +3,16 @@ from discord.ext import commands
 
 
 class Log(commands.Cog, name="Logs"):
+    """
+    Get ruined logs here!
+    """
+
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
+
+    @property
+    def display_emoji(self) -> str:
+        return "📝"
 
     @commands.hybrid_command()
     async def get_log(self, ctx: commands.Context, log_id: str) -> None:

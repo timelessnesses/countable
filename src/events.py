@@ -176,9 +176,9 @@ class events(commands.Cog):
             )
         ):
             await self.bot.db.execute(
-                "INSERT INTO user_stats (user_id, guild_id, count_number) VALUES ($1, $2, $3)",
+                "INSERT INTO user_stats (user_id, alphabet_counts, ruined_counts) VALUES ($1, $2, $3)",
                 message.author.id,
-                message.guild.id,
+                0,
                 0,
             )
         count = (
@@ -195,12 +195,15 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error: Exception):
-        await ctx.message.add_reaction("❌")
+        try:
+            await ctx.message.add_reaction("❌")
+        except discord.NotFound:
+            pass
         m = await self.bot.db.fetch(
-            "SELECT channel_id FROM config WHERE guild_id = $1", message.guild.id
+            "SELECT channel_id FROM config WHERE guild_id = $1", ctx.guild.id
         )
         try:
-            if not message.channel.id == int(m[0]["channel_id"]):
+            if not ctx.channel.id == int(m[0]["channel_id"]):
                 return
         except IndexError:
             return
