@@ -40,25 +40,26 @@ class Leaderboard(commands.Cog):
         """
 
     @leaderboard.command()
-    async def by_chain_count(self, ctx: commands.Bot):
+    async def by_alphabet_counts(self, ctx: commands.Bot):
         """
         Get every server's alphabet chain count that wasn't ruined ranked by most to the least in top 10!
         """
+        print("called")
         servers = sorted(
             await self.bot.db.fetch("SELECT * FROM counting"),
-            key=lambda x: x["chain_count"],
+            key=lambda x: x["alphabet_counts"],
             reverse=True,
         )[:10]
         all_guilds = sorted(
             await self.bot.db.fetch("SELECT * FROM counting"),
-            key=lambda x: x["chain_count"],
+            key=lambda x: x["alphabet_counts"],
             reverse=True,
         )
         embed = discord.Embed(title="Top 10 Servers by Chain Count", color=0x00FF00)
         for i, server in enumerate(servers):
             embed.add_field(
                 name=f"{self.prefix(i + 1)}. {await self.bot.fetch_guild(server['guild_id'])}",
-                value=f"{server['chain_count']} chains. (Currently at character {self.column(server['chain_count'])})",
+                value=f"{server['alphabet_counts']} chains. (Currently at character {self.column(server['alphabet_counts'])})",
             )
         for i, server in enumerate(all_guilds):
             if server["guild_id"] == ctx.guild.id:
@@ -67,7 +68,7 @@ class Leaderboard(commands.Cog):
                 break
         try:
             embed.set_footer(
-                text=f"{ctx.guild} is at currently at {self.prefix(i_ + 1)} and currently at character {self.column(server_['chain_count'])}."
+                text=f"{ctx.guild} is at currently at {self.prefix(i_ + 1)} and currently at character {self.column(server_['alphabet_counts'])}."
             )
         except UnboundLocalError:
             pass
@@ -80,19 +81,19 @@ class Leaderboard(commands.Cog):
         """
         users = sorted(
             await self.bot.db.fetch("SELECT * FROM user_stats"),
-            key=lambda x: x["count_number"],
+            key=lambda x: x["alphabet_counts"],
             reverse=True,
         )[:10]
         all_users = sorted(
             await self.bot.db.fetch("SELECT * FROM user_stats"),
-            key=lambda x: x["count_number"],
+            key=lambda x: x["alphabet_counts"],
             reverse=True,
         )
         embed = discord.Embed(title="Top 10 Users by Alphabet Count", color=0x00FF00)
         for i, user in enumerate(users):
             embed.add_field(
                 name=f"{self.prefix(i + 1)}. {await self.bot.fetch_user(user['user_id'])}",
-                value=f"{user['count_number']} letters. (Currently at character {self.column(user['count_number'])})",
+                value=f"{user['alphabet_counts']} letters. (Currently have alphabet count at{user['alphabet_counts']})",
             )
         for i, user in enumerate(all_users):
             if user["user_id"] == ctx.author.id:
@@ -101,7 +102,7 @@ class Leaderboard(commands.Cog):
                 break
         try:
             embed.set_footer(
-                text=f"{ctx.author} is at currently at {self.prefix(i_ + 1)} and currently at character {self.column(user_['count_number'])}."
+                text=f"{ctx.author} is at currently at {self.prefix(i_ + 1)} and currently have alphabet count at {user_['alphabet_counts']}."
             )
         except UnboundLocalError:
             pass

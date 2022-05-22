@@ -15,7 +15,7 @@ class Log(commands.Cog, name="Logs"):
         return "📝"
 
     @commands.hybrid_command()
-    async def get_log(self, ctx: commands.Context, log_id: str) -> None:
+    async def get_log(self, ctx: commands.Context, log_id: int) -> None:
         """
         Get the log of a specific log id
         """
@@ -33,62 +33,22 @@ class Log(commands.Cog, name="Logs"):
                 )
             )
         selected = log[0]
-        channel = await ctx.guild.fetch_channel(selected["channel_id"])
-        previous_message = await channel.fetch_message(selected["message_id"])
         embed = discord.Embed(
-            title="Log",
-            description="Here's information of this log",
-            colour=discord.Colour.green(),
+            title="Log info of {}".format(selected["id"]),
         )
-        embed.add_field(name="Log ID", value=selected["id"], inline=False)
+        channel = (await ctx.guild.fetch_channel(selected["channel_id"])).mention
+        embed.add_field(name="Channel", value=channel)
+        ruined_author = (await self.bot.fetch_user(selected["ruiner_id"])).mention
+        embed.add_field(name="Ruined by", value=ruined_author)
         embed.add_field(
-            name="Guild",
-            value=ctx.guild.name,
-            inline=False,
+            name="Ruined at",
+            value=selected["when_ruined"].strftime("%Y/%m/%d %H:%M:%S"),
         )
+        embed.add_field(name="Reason", value=selected["reason"])
         embed.add_field(
-            name="Channel",
-            value=channel.mention,
-            inline=False,
+            name="Jump to ruined message", value=selected["ruined_jump_url"]
         )
-        embed.add_field(
-            name="Ruined message ID",
-            value=selected["ruined_message_id"],
-            inline=False,
-        )
-        embed.add_field(
-            name="Ruined message",
-            value=selected["ruined_jumpurl"],
-            inline=False,
-        )
-        embed.add_field(
-            name="Ruined message author",
-            value=await ctx.guild.fetch_member(
-                selected["ruined_author_id"]
-            ).display_name,
-            inline=False,
-        )
-        embed.add_field(
-            name="Ruined message content",
-            value=selected["ruined_content"],
-            inline=False,
-        )
-        embed.add_field(
-            name="When it was ruined",
-            value=selected["when_ruined"],
-            inline=False,
-        )
-        embed.add_field(
-            name="Reason",
-            value=selected["reason"],
-            inline=False,
-        )
-        embed.add_field(
-            name="Previous chain message",
-            value=previous_message.jump_url,
-            inline=False,
-        )
-
+        embed.set_footer(text=">:(")
         await ctx.send(embed=embed)
 
 

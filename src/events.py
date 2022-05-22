@@ -22,6 +22,7 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message) -> None:
+        ctx = await self.bot.get_context(message)
         if message.author.bot:
             return
         if message.guild is None:
@@ -39,6 +40,9 @@ class events(commands.Cog):
         previous_person = await self.bot.db.fetch(
             "SELECT previous_person FROM counting WHERE guild_id = $1",
             message.guild.id,
+        )
+        previous_count = await self.bot.db.fetch(
+            "SELECT count_number FROM counting WHERE guild_id = $1", message.guild.id
         )
         if not previous_person:
             return
@@ -60,6 +64,7 @@ class events(commands.Cog):
             int(previous_person[0]["previous_person"]) == message.author.id
             and is_same_person[0]["is_same_person"] != True
         ):
+            await ctx.message.add_reaction("❌")
             id = stuffs.random_id()
             now = datetime.datetime.now()
             await message.channel.send(
@@ -108,14 +113,54 @@ class events(commands.Cog):
                 0,
                 message.guild.id,
             )
-            raise Exception("chain_error")
+            current_count = await self.bot.db.fetch(
+                "SELECT * FROM counting WHERE guild_id = $1", ctx.guild.id
+            )
+            if not current_count:
+                return
+            if (
+                previous_count[0]["count_number"] + 1
+                > current_count[0]["longest_chain"]
+            ):
+                await ctx.send(
+                    embed=discord.Embed(
+                        title="This server has broke personal streak",
+                        description=f"Your previous chain count is {current_count[0]['longest_chain']}. Now it is {current_count[0]['count_number']}. Congratulation! 🥳",
+                        colour=discord.Colour.green(),
+                    )
+                )
+                await self.bot.db.execute(
+                    "UPDATE counting SET longest_chain = $1 WHERE guild_id = $2",
+                    current_count[0]["count_number"],
+                    ctx.guild.id,
+                )
+            current_highest_chain = await self.bot.db.fetch("SELECT * FROM counting")
+            first_rank = sorted(
+                current_highest_chain, key=lambda x: x["longest_chain"], reverse=True
+            )[0]
+
+            print(first_rank)
+            print(previous_count)
+            print(current_count)
+            if first_rank["longest_chain"] < previous_count[0]["count_number"] + 1:
+                await ctx.send(
+                    embed=discord.Embed(
+                        title=f"This server has broke global streak that was made by {await self.bot.fetch_guild(first_rank['guild_id'])}",
+                        description=f"Previous world record is {first_rank['longest_chain']} from {(await self.bot.fetch_guild(first_rank('guild_id')))}. Now it is {current_count[0]['longest_chain']}. Congratulation! 🥳",
+                        colour=discord.Colour.green(),
+                    )
+                )
+                await self.bot.db.execute(
+                    "UPDATE counting SET longest_chain = $1 WHERE guild_id = $2",
+                    current_count[0]["longest_chain"],
+                    ctx.guild.id,
+                )
+            return
         # -------------------------------------------------------
         # Check if it is a chained message
-        previous_count = await self.bot.db.fetch(
-            "SELECT count_number FROM counting WHERE guild_id = $1", message.guild.id
-        )
         expect = self.column(int(previous_count[0]["count_number"]) + 1)
         if message.content.lower() != expect:
+            await ctx.message.add_reaction("❌")
             id = stuffs.random_id()
             now = datetime.datetime.now()
             await message.channel.send(
@@ -164,7 +209,48 @@ class events(commands.Cog):
                 message.guild.id,
             )
 
-            raise Exception("pattern_error")
+            current_count = await self.bot.db.fetch(
+                "SELECT * FROM counting WHERE guild_id = $1", ctx.guild.id
+            )
+            print(current_count)
+            if not current_count:
+                return
+            print("i am still going")
+            if (
+                previous_count[0]["count_number"] + 1
+                > current_count[0]["longest_chain"]
+            ):
+                await ctx.send(
+                    embed=discord.Embed(
+                        title="This server has broke personal streak",
+                        description=f"Your previous chain count is {current_count[0]['longest_chain']}. Now it is {previous_count[0]['count_number']+1}. Congratulation! 🥳",
+                        colour=discord.Colour.green(),
+                    )
+                )
+                await self.bot.db.execute(
+                    "UPDATE counting SET longest_chain = $1 WHERE guild_id = $2",
+                    previous_count[0]["count_number"] + 1,
+                    ctx.guild.id,
+                )
+            current_highest_chain = await self.bot.db.fetch("SELECT * FROM counting")
+            first_rank = sorted(
+                current_highest_chain, key=lambda x: x["longest_chain"], reverse=True
+            )[0]
+            print(first_rank)
+            if first_rank["longest_chain"] < previous_count[0]["count_number"] + 1:
+                await ctx.send(
+                    embed=discord.Embed(
+                        title=f"This server has broke global streak that was made by {await self.bot.fetch_guild(first_rank['guild_id'])}",
+                        description=f"Previous world record is {first_rank['longest_chain']}. Now it is {current_count[0]['longest_chain']}. Congratulation! 🥳",
+                        colour=discord.Colour.green(),
+                    )
+                )
+                await self.bot.db.execute(
+                    "UPDATE counting SET longest_chain = $1 WHERE guild_id = $2",
+                    previous_count[0]["count_number"] + 1,
+                    ctx.guild.id,
+                )
+            return
         # -------------------------------------------------------
         # all condition were met so we can count
         previous_number = await self.bot.db.fetch(
@@ -199,62 +285,6 @@ class events(commands.Cog):
             count,
             message.author.id,
         )
-
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, error: Exception):
-        self.bot.log.exception()
-        try:
-            await ctx.message.add_reaction("❌")
-        except discord.NotFound:
-            pass
-        m = await self.bot.db.fetch(
-            "SELECT channel_id FROM config WHERE guild_id = $1", ctx.guild.id
-        )
-        try:
-            if not ctx.channel.id == int(m[0]["channel_id"]):
-                return
-        except IndexError:
-            return
-
-        current_count = await self.bot.db.fetch(
-            "SELECT * FROM counting WHERE guild_id = $1", ctx.guild.id
-        )
-        if not current_count:
-            return
-        if current_count[0]["count_number"] > current_count[0]["longest_chain"]:
-            await ctx.send(
-                embed=discord.Embed(
-                    title="This server has broke personal streak",
-                    description=f"Your previous chain count is {current_count[0]['longest_chain']}. Now it is {current_count[0]['count_number']}. Congratulation! 🥳",
-                    colour=discord.Colour.green(),
-                )
-            )
-            await self.bot.db.execute(
-                "UPDATE counting SET longest_chain = $1 WHERE guild_id = $2",
-                current_count[0]["count_number"],
-                ctx.guild.id,
-            )
-        current_highest_chain = await self.bot.db.fetch("SELECT * FROM counting")
-        first_rank = sorted(
-            current_highest_chain, key=lambda x: x["longest_chain"], reverse=True
-        )[0]
-        if first_rank["longest_chain"] < current_count[0]["longest_chain"]:
-            await ctx.send(
-                embed=discord.Embed(
-                    title=f"This server has broke global streak that was made by {await self.bot.fetch_guild(first_rank['guild_id'])}",
-                    description=f"Previous world record is {first_rank['longest_chain']}. Now it is {current_count[0]['longest_chain']}. Congratulation! 🥳",
-                    colour=discord.Colour.green(),
-                )
-            )
-            await self.bot.db.execute(
-                "UPDATE counting SET longest_chain = $1 WHERE guild_id = $2",
-                current_count[0]["longest_chain"],
-                ctx.guild.id,
-            )
-
-    @commands.Cog.listener()
-    async def on_error(self, event_method, *args, **kwargs):
-        self.bot.log.exception()
 
 
 async def setup(bot: commands.Bot):
