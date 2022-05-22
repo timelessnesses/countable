@@ -166,3 +166,6 @@ cython_debug/
 # .vscode config folder
 # due to we store target database credentials in .vscode/settings.json
 .vscode/
+
+# log folder
+logs/

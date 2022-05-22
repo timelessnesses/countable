@@ -11,17 +11,39 @@ import logging
 import os
 import ssl
 import subprocess
+import sys
 import traceback
 
 from server import start
 from sql.sql import EasySQL
 
+
+def log_errors(error, *args, **kwargs):
+    log.exception(error.__class__.__name__)
+
+
+sys.excepthook = log_errors
+
+formatting = logging.Formatter("[%(asctime)s] - [%(levelname)s] [%(name)s] %(message)s")
+
+logging.basicConfig(
+    level=logging.NOTSET,
+    format="[%(asctime)s] - [%(levelname)s] [%(name)s] %(message)s",
+    datefmt="%Y/%m/%d %H:%M:%S",
+)
+
+log = logging.getLogger("AlphabetBot")
+log.setLevel(logging.NOTSET)
+
+f = logging.FileHandler("logs/bot.log")
+f.setFormatter(formatting)
+log.addHandler(f)
+
 logging.getLogger("discord").setLevel(logging.WARNING)  # mute
 
 bot = commands.Bot(command_prefix="a!", intents=discord.Intents.all())
-logging.basicConfig(level=logging.NOTSET)
-log = logging.getLogger("AlphabetBot")
-log.setLevel(logging.NOTSET)
+bot.log = log
+
 observer = Observer()
 
 
@@ -107,7 +129,19 @@ async def main():
                         log.info(f"Loaded extension {extension[:-3]}")
                 await bot.load_extension("jishaku")
                 log.info("Loaded jishaku")
-                bot.db = await EasySQL().connect(**args)
+                try:
+                    bot.db = await EasySQL().connect(**args)
+                except ConnectionError:
+                    log.exception("Failed to connect to database")
+                    log.info("Trying to remove SSL context")
+                    args["ssl"] = None
+                    try:
+                        bot.db = await EasySQL().connect(**args)
+                    except ConnectionError:
+                        log.exception("Failed to connect to database")
+                        log.fatal("Exiting...")
+                        return
+                    log.info("Successfully connected to database")
                 log.info("Connected to database")
                 await bot.db.execute(open("sql/starter.sql", "r").read())
                 log.info("Executed starter sql")
@@ -118,7 +152,9 @@ async def main():
                 log.info(
                     f"Started with version {bot.version_} and started at {bot.start_time}"
                 )
-                start()
+                if os.environ.get("IS_REPLIT"):
+                    start()
+                    log.info("REPLIT detected opening webserver for recieve pinging")
                 await bot.start(os.environ["ALPHABET_TOKEN"])
                 started = True  # break loop
     except KeyboardInterrupt:

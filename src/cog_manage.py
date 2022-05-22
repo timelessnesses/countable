@@ -4,12 +4,12 @@ from discord.ext import commands
 
 
 class CogsManagement(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def load(self, ctx, *, cog: str):
+    async def load(self, ctx, *, cog: str) -> None:
         """
         Loads a cog.
         """
@@ -22,7 +22,7 @@ class CogsManagement(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def unload(self, ctx, *, cog: str):
+    async def unload(self, ctx, *, cog: str) -> None:
         """
         Unloads a cog.
         """
@@ -35,7 +35,7 @@ class CogsManagement(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def reload(self, ctx, *, cog: str):
+    async def reload(self, ctx, *, cog: str) -> None:
         """
         Reloads a cog.
         """
@@ -50,7 +50,7 @@ class CogsManagement(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def reloadall(self, ctx):
+    async def reloadall(self, ctx) -> None:
         """
         Reloads all cogs.
         """
@@ -68,5 +68,5 @@ class CogsManagement(commands.Cog):
                 await ctx.send(f"**`SUCCESS`**")
 
 
-async def setup(bot):
+async def setup(bot) -> None:
     await bot.add_cog(CogsManagement(bot))
