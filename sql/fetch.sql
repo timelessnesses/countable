@@ -1,2 +1,2 @@
 SELECT *
-FROM counting
+FROM config

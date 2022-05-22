@@ -42,6 +42,10 @@ class events(commands.Cog):
         )
         if not previous_person:
             return
+        is_same_person = await self.bot.db.fetch(
+            "SELECT is_same_person FROM config WHERE guild_id = $1",
+            message.guild.id,
+        )
         if previous_person[0]["previous_person"] is None:
             await self.bot.db.execute(
                 "UPDATE counting SET previous_person = $1 WHERE guild_id = $2",
@@ -52,13 +56,10 @@ class events(commands.Cog):
                 "SELECT previous_person FROM counting WHERE guild_id = $1",
                 message.guild.id,
             )
-        elif int(previous_person[0]["previous_person"]) == message.author.id:
-            is_same_person = await self.bot.db.fetch(
-                "SELECT is_same_person FROM config WHERE guild_id = $1",
-                message.guild.id,
-            )
-            if is_same_person[0]["is_same_person"]:
-                return
+        elif (
+            int(previous_person[0]["previous_person"]) == message.author.id
+            and is_same_person[0]["is_same_person"] != True
+        ):
             id = stuffs.random_id()
             now = datetime.datetime.now()
             await message.channel.send(
@@ -156,6 +157,13 @@ class events(commands.Cog):
                 "You broke the pattern.",
                 [a async for a in message.channel.history(limit=1)][0].id,
             )
+            await self.bot.db.execute(
+                "UPDATE counting SET previous_person = $1, count_number =  $2 WHERE guild_id = $3",
+                None,
+                0,
+                message.guild.id,
+            )
+
             raise Exception("pattern_error")
         # -------------------------------------------------------
         # all condition were met so we can count
@@ -185,16 +193,16 @@ class events(commands.Cog):
             await self.bot.db.fetch(
                 "SELECT * FROM user_stats WHERE user_id = $1", message.author.id
             )
-        )[0]["count_number"] + 1
+        )[0]["alphabet_counts"] + 1
         await self.bot.db.execute(
-            "UPDATE user_stats SET count_number = $1 WHERE user_id = $2 AND guild_id = $3",
+            "UPDATE user_stats SET alphabet_counts = $1 WHERE user_id = $2",
             count,
             message.author.id,
-            message.guild.id,
         )
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: commands.Context, error: Exception):
+        self.bot.log.exception()
         try:
             await ctx.message.add_reaction("❌")
         except discord.NotFound:
@@ -243,6 +251,10 @@ class events(commands.Cog):
                 current_count[0]["longest_chain"],
                 ctx.guild.id,
             )
+
+    @commands.Cog.listener()
+    async def on_error(self, event_method, *args, **kwargs):
+        self.bot.log.exception()
 
 
 async def setup(bot: commands.Bot):
