@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS config(
     channel_id BIGINT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS logger(
-    id BIGSERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     guild_id BIGINT NOT NULL,
     channel_id BIGINT NOT NULL,
     ruiner_id BIGINT NOT NULL,
