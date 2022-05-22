@@ -10,8 +10,8 @@ import datetime
 import logging
 import os
 import ssl
-import sys
 import subprocess
+import sys
 import traceback
 
 from server import start
