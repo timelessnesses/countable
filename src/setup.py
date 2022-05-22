@@ -9,23 +9,16 @@ class setup_(commands.Cog, name="Setup"):
     Alphabet's config command group
     """
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
 
     @property
     def display_emoji(self):
         return "🔨"
 
-    @commands.hybrid_group()
-    async def alphabet(self, ctx: commands.Context):
-        """
-        Alphabet's main command group
-        """
-        if ctx.invoked_subcommand is None:
-            await ctx.send_help(ctx.command)
-
-    @alphabet.command()
-    async def setup(self, ctx: commands.Context):
+    @commands.hybrid_command()
+    @commands.has_permissions(administrator=True)
+    async def setup(self, ctx: commands.Context) -> None:
         """
         Setup the alphabet counter
         """
@@ -47,6 +40,9 @@ class setup_(commands.Cog, name="Setup"):
             if view.value:
                 await self.bot.db.execute(
                     "DELETE FROM config WHERE guild_id = $1", ctx.guild.id
+                )
+                await self.bot.db.execute(
+                    "DELETE FROM counting WHERE guild_id = $1", ctx.guild.id
                 )
                 await ctx.send(
                     embed=discord.Embed(
@@ -168,83 +164,6 @@ class setup_(commands.Cog, name="Setup"):
             channel.id,
             None,
         )
-
-    @alphabet.command()
-    async def get_log(self, ctx: commands.Context, log_id: str):
-        """
-        Get the log of a specific log id
-        """
-        log = await self.bot.db.fetch(
-            "SELECT * FROM logger WHERE guild_id = $1 AND id = $2",
-            ctx.guild.id,
-            log_id,
-        )
-        if not log:
-            return await ctx.send(
-                embed=discord.Embed(
-                    title="Log not found",
-                    description="Log not found",
-                    colour=discord.Colour.red(),
-                )
-            )
-        selected = log[0]
-        channel = await ctx.guild.fetch_channel(selected["channel_id"])
-        previous_message = await channel.fetch_message(selected["message_id"])
-        embed = discord.Embed(
-            title="Log",
-            description="Here's information of this log",
-            colour=discord.Colour.green(),
-        )
-        embed.add_field(name="Log ID", value=selected["id"], inline=False)
-        embed.add_field(
-            name="Guild",
-            value=ctx.guild.name,
-            inline=False,
-        )
-        embed.add_field(
-            name="Channel",
-            value=channel.mention,
-            inline=False,
-        )
-        embed.add_field(
-            name="Ruined message ID",
-            value=selected["ruined_message_id"],
-            inline=False,
-        )
-        embed.add_field(
-            name="Ruined message",
-            value=selected["ruined_jumpurl"],
-            inline=False,
-        )
-        embed.add_field(
-            name="Ruined message author",
-            value=await ctx.guild.fetch_member(
-                selected["ruined_author_id"]
-            ).display_name,
-            inline=False,
-        )
-        embed.add_field(
-            name="Ruined message content",
-            value=selected["ruined_content"],
-            inline=False,
-        )
-        embed.add_field(
-            name="When it was ruined",
-            value=selected["when_ruined"],
-            inline=False,
-        )
-        embed.add_field(
-            name="Reason",
-            value=selected["reason"],
-            inline=False,
-        )
-        embed.add_field(
-            name="Previous chain message",
-            value=previous_message.jump_url,
-            inline=False,
-        )
-
-        await ctx.send(embed=embed)
 
 
 async def setup(bot: commands.Bot):
