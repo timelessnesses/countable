@@ -17,13 +17,6 @@ import traceback
 from server import start
 from sql.sql import EasySQL
 
-
-def log_errors(error, *args, **kwargs):
-    log.exception(error.__class__.__name__)
-
-
-sys.excepthook = log_errors
-
 formatting = logging.Formatter("[%(asctime)s] - [%(levelname)s] [%(name)s] %(message)s")
 
 logging.basicConfig(
