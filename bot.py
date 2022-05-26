@@ -11,7 +11,6 @@ import logging
 import os
 import ssl
 import subprocess
-import sys
 import traceback
 
 from server import start
