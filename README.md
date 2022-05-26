@@ -1,4 +1,4 @@
-# alphabet-count-bot
+# countable
 
 A alphabet count bot inspired by Counting
 
