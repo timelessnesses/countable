@@ -66,18 +66,19 @@ def get_git_revision_short_hash() -> str:
 
 
 def get_version():
-    is_updated = (
-        subprocess.run(["git", "status", "-uno"], stdout=subprocess.PIPE)
-        .stdout.decode("ascii")
-        .strip()
-    )
-    if "up to date" in is_updated:
+    is_updated = subprocess.check_output(["git", "status", "-uno"]).decode("ascii")
+
+    if "modified" in is_updated:
+        is_updated = None
+    elif "up to date" in is_updated:
         is_updated = True
     else:
         is_updated = False
 
     if is_updated:
         bot.version_ = f"latest ({get_git_revision_short_hash()})"
+    elif is_updated is None:
+        bot.version_ = f"{get_git_revision_short_hash()} (modified)"
     else:
         bot.version_ = f"old ({get_git_revision_short_hash()}) - not up to date"
 
