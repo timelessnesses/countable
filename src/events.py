@@ -252,7 +252,6 @@ class events(commands.Cog):
                     previous_count[0]["count_number"] + 1,
                     ctx.guild.id,
                 )
-       )
 
             save_count = await self.bot.db.fetch(
                 "SELECT * FROM config WHERE guild_id = $1", ctx.guild.id
