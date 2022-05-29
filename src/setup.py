@@ -71,6 +71,7 @@ class setup_(commands.Cog, name="Setup"):
         ask = [
             "channel",
             "same_person",
+            "save_count",
         ]
         answers = {}
         a = None
@@ -93,13 +94,14 @@ class setup_(commands.Cog, name="Setup"):
             await a.delete()
         await self.bot.db.execute(
             """
-            INSERT INTO config (guild_id, is_same_person, already_setupped, channel_id)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO config (guild_id, is_same_person, already_setupped, channel_id, save_count)
+            VALUES ($1, $2, $3, $4, $5)
             """,
             ctx.guild.id,
             answers["same_person"],
             True,
             answers["channel"],
+            answers["save_count"],
         )
         await ctx.send(
             embed=discord.Embed(

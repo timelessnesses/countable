@@ -83,3 +83,9 @@ ALPHABET_TOKEN=<bot token>
 ```
 
 and run `python -m pip install poetry` then `python -m poetry install` then `python -m poetry shell` and run `python bot.py`
+
+# Current State
+
+- [] Stable
+- [x] Broken
+
