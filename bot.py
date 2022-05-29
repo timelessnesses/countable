@@ -27,6 +27,12 @@ logging.basicConfig(
 log = logging.getLogger("AlphabetBot")
 log.setLevel(logging.NOTSET)
 
+try:
+    os.mkdir("logs")
+except FileExistsError:
+    pass
+with open("logs/bot.log", "w") as f:
+    f.write("")
 f = logging.FileHandler("logs/bot.log")
 f.setFormatter(formatting)
 log.addHandler(f)
@@ -125,7 +131,7 @@ async def main():
                 try:
                     bot.db = await EasySQL().connect(**args)
                 except ConnectionError:
-                    log.exception("Failed to connect to database")
+                    log.fatal("Failed to connect to database")
                     log.info("Trying to remove SSL context")
                     args["ssl"] = None
                     try:
