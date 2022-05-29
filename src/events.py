@@ -197,18 +197,15 @@ class events(commands.Cog):
                 )
             )
             await self.bot.db.execute(
-                "INSERT INTO logger (id, guild_id, channel_id, ruined_chain_id, ruiner_id, ruined_jump_url, ruined_content, when_ruined, reason, previous_chain_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
+                "INSERT INTO logger (id, guild_id, channel_id, ruiner_id, ruined_jump_url, when_ruined, reason) VALUES ($1, $2, $3, $4, $5, $6, $7)",
                 id,
                 message.guild.id,
                 message.channel.id,
-                message.id,
                 message.author.id,
                 message.jump_url,
-                message.content,
                 now,
                 "You broke the pattern.",
-                [a async for a in message.channel.history(limit=1)][0].id,
-            )
+            )  # TODO: this errored out
             await self.bot.db.execute(
                 "UPDATE counting SET previous_person = $1, count_number =  $2 WHERE guild_id = $3",
                 None,
@@ -241,7 +238,6 @@ class events(commands.Cog):
             first_rank = sorted(
                 current_highest_chain, key=lambda x: x["longest_chain"], reverse=True
             )[0]
-            print(first_rank)
             if first_rank["longest_chain"] < previous_count[0]["count_number"] + 1:
                 await ctx.send(
                     embed=discord.Embed(

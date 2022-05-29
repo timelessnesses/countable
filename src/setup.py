@@ -63,7 +63,8 @@ class setup_(commands.Cog, name="Setup"):
                 description="""
                 This command will ask you
                 1. Mention a channel
-                2. Can person counting without checking if it is a same person (true/false)
+                2. Can person counting without checking if it is a same person (Unranked if enabled) (true/false)
+                3. Save the count (Unranked if enabled) (true/false)
                 """,
                 colour=discord.Colour.green(),
             ),
