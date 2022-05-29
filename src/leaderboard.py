@@ -59,11 +59,9 @@ class Leaderboard(commands.Cog):
         for i, server in enumerate(servers):
             if server["count_number"] == 0:
                 continue
-            if server["guild_id"] in [config["guild_id"] for config in configs]:
-                if (
-                    configs[int(server["guild_id"])]["is_same_person"]
-                    or configs[int(server["guild_id"])]["save_count"]
-                ):  # unranked
+            if server["guild_id"] in [x["guild_id"] for x in configs]:
+                config = [x for x in configs if x["guild_id"] == server["guild_id"]][0]
+                if config["is_same_person"] or config["save_count"]:  # unranked
                     continue
             embed.add_field(
                 name=f"{self.prefix(i + 1)}. {await self.bot.fetch_guild(server['guild_id'])}",
@@ -76,7 +74,7 @@ class Leaderboard(commands.Cog):
                 break
         try:
             embed.set_footer(
-                text=f"{ctx.guild} is at currently at {self.prefix(i_ + 1)} and currently at character {self.column(server_['count_number'])}."
+                text=f"{ctx.guild} is at currently at {self.prefix(i_ + 1)} and currently at character {self.column(server_['count_number'])}. {'But your server is unranked due to you enable save count or is same person.' if server_['guild_id'] in [x['guild_id'] for x in configs] and [x for x in configs if x['guild_id'] == server_['guild_id']][0]['is_same_person'] or server_['guild_id'] in [x['guild_id'] for x in configs] and [x for x in configs if x['guild_id'] == server_['guild_id']][0]['save_count'] else ''}"
             )
         except UnboundLocalError:
             pass
@@ -132,14 +130,13 @@ class Leaderboard(commands.Cog):
             reverse=True,
         )
         embed = discord.Embed(title="Top 10 Servers by Longest Chain", color=0x00FF00)
+        configs = await self.bot.db.fetch("SELECT * FROM config")
         for i, server in enumerate(servers):
             if server["longest_chain"] == 0:
                 continue
-            if server["guild_id"] in [config["guild_id"] for config in configs]:
-                if (
-                    configs[int(server["guild_id"])]["is_same_person"]
-                    or configs[int(server["guild_id"])]["save_count"]
-                ):
+            if server["guild_id"] in [x["guild_id"] for x in configs]:
+                config = [x for x in configs if x["guild_id"] == server["guild_id"]][0]
+                if config["is_same_person"] or config["save_count"]:
                     continue
             embed.add_field(
                 name=f"{self.prefix(i + 1)}. {await self.bot.fetch_guild(server['guild_id'])}",
@@ -152,7 +149,7 @@ class Leaderboard(commands.Cog):
                 break
         try:
             embed.set_footer(
-                text=f"{ctx.guild} is at currently at {self.prefix(i_ + 1)} and currently at character {self.column(server_['longest_chain'])}."
+                text=f"{ctx.guild} is at currently at {self.prefix(i_ + 1)} and currently at character {self.column(server_['longest_chain'])}. {'But your server is unranked due to you enable save count or is same person.' if server_['guild_id'] in [x['guild_id'] for x in configs] and [x for x in configs if x['guild_id'] == server_['guild_id']][0]['is_same_person'] or server_['guild_id'] in [x['guild_id'] for x in configs] and [x for x in configs if x['guild_id'] == server_['guild_id']][0]['save_count'] else ''}."
             )
         except UnboundLocalError:
             pass
