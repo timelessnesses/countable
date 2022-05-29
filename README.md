@@ -86,6 +86,5 @@ and run `python -m pip install poetry` then `python -m poetry install` then `pyt
 
 # Current State
 
-- [] Stable
-- [x] Broken
-
+- [x] Stable
+- [ ] Broken
