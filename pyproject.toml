@@ -19,6 +19,7 @@ psutil = "^5.9.0"
 discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus"}
 watchdog = "^2.1.7"
 Flask = "^2.1.2"
+uvloop = {version = "^0.16.0", platform = "linux"}
 
 [tool.poetry.dev-dependencies]
 watchdog = "^2.1.7"

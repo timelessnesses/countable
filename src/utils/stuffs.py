@@ -4,7 +4,7 @@ import string
 import discord
 
 
-def random_id(length=10):
+def random_id(length=8):
     """
     Generate a random string of fixed length
     """

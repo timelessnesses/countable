@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS config(
     guild_id BIGSERIAL PRIMARY KEY,
     is_same_person BOOLEAN NOT NULL DEFAULT FALSE,
     already_setupped BOOLEAN NOT NULL DEFAULT FALSE,
-    channel_id BIGINT NOT NULL
+    channel_id BIGINT NOT NULL,
+    save_count BOOLEAN NOT NULL DEFAULT FALSE
 );
 CREATE TABLE IF NOT EXISTS logger(
     id SERIAL PRIMARY KEY,

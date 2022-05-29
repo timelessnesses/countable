@@ -135,10 +135,6 @@ class events(commands.Cog):
             first_rank = sorted(
                 current_highest_chain, key=lambda x: x["longest_chain"], reverse=True
             )[0]
-
-            print(first_rank)
-            print(previous_count)
-            print(current_count)
             if first_rank["longest_chain"] < previous_count[0]["count_number"] + 1:
                 await ctx.send(
                     embed=discord.Embed(
@@ -210,7 +206,7 @@ class events(commands.Cog):
                 message.jump_url,
                 now,
                 "You broke the pattern.",
-            )
+            )  # TODO: this errored out
             await self.bot.db.execute(
                 "UPDATE counting SET previous_person = $1, count_number =  $2 WHERE guild_id = $3",
                 None,
@@ -221,10 +217,8 @@ class events(commands.Cog):
             current_count = await self.bot.db.fetch(
                 "SELECT * FROM counting WHERE guild_id = $1", ctx.guild.id
             )
-            print(current_count)
             if not current_count:
                 return
-            print("i am still going")
             if (
                 previous_count[0]["count_number"] + 1
                 > current_count[0]["longest_chain"]
@@ -245,7 +239,6 @@ class events(commands.Cog):
             first_rank = sorted(
                 current_highest_chain, key=lambda x: x["longest_chain"], reverse=True
             )[0]
-            print(first_rank)
             if first_rank["longest_chain"] < previous_count[0]["count_number"] + 1:
                 await ctx.send(
                     embed=discord.Embed(
@@ -259,6 +252,7 @@ class events(commands.Cog):
                     previous_count[0]["count_number"] + 1,
                     ctx.guild.id,
                 )
+
             save_count = await self.bot.db.fetch(
                 "SELECT * FROM config WHERE guild_id = $1", ctx.guild.id
             )
@@ -274,7 +268,6 @@ class events(commands.Cog):
                     0,
                     ctx.guild.id,
                 )
-
             return
         # -------------------------------------------------------
         # all condition were met so we can count
