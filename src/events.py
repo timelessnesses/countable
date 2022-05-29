@@ -118,6 +118,7 @@ class events(commands.Cog):
             if (
                 previous_count[0]["count_number"] + 1
                 > current_count[0]["longest_chain"]
+                and previous_count[0]["count_number"] != 0
             ):
                 await ctx.send(
                     embed=discord.Embed(
@@ -139,7 +140,7 @@ class events(commands.Cog):
                 await ctx.send(
                     embed=discord.Embed(
                         title=f"This server has broke global streak that was made by {await self.bot.fetch_guild(first_rank['guild_id'])}",
-                        description=f"Previous world record is {first_rank['longest_chain']} from {(await self.bot.fetch_guild(first_rank('guild_id')))}. Now it is {current_count[0]['longest_chain']}. Congratulation! 🥳",
+                        description=f"Previous world record is {first_rank['longest_chain']} from {(await self.bot.fetch_guild(first_rank['guild_id']))}. Now it is {current_count[0]['longest_chain']}. Congratulation! 🥳",
                         colour=discord.Colour.green(),
                     )
                 )
@@ -222,6 +223,7 @@ class events(commands.Cog):
             if (
                 previous_count[0]["count_number"] + 1
                 > current_count[0]["longest_chain"]
+                and previous_count[0]["count_number"] != 0
             ):
                 await ctx.send(
                     embed=discord.Embed(
