@@ -24,7 +24,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Bot information**:
-- Discord.py commit (check with `python -m discord`):
+- Discord.py commit (check with `python -m discord -v`):
 - Bot's commit (check with `git rev-parse --short HEAD`):
 
 
