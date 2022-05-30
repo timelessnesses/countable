@@ -83,7 +83,10 @@ def get_version():
 
     if "modified" in is_updated:
         is_updated = None
-    elif "up to date" in is_updated:
+    elif (
+        "up to date" in is_updated
+        or "nothing to commit, working tree clean" in is_updated
+    ):
         is_updated = True
     else:
         is_updated = False
