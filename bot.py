@@ -1,3 +1,9 @@
+try:
+    import uvloop
+    uvloop.install()
+except (ImportError, ModuleNotFoundError):
+    pass
+
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -154,7 +160,10 @@ async def main():
                 if os.environ.get("IS_REPLIT"):
                     start()
                     log.info("REPLIT detected opening webserver for recieve pinging")
-                await bot.start(os.environ["ALPHABET_TOKEN"])
+                try:
+                    await bot.start(os.environ["ALPHABET_TOKEN"])
+                except discord.errors.HTTPException:
+                    log.exception("You likely got ratelimited or bot's token is wrong")
                 started = True  # break loop
     except KeyboardInterrupt:
         log.info("Exiting...")
