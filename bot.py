@@ -79,7 +79,7 @@ def get_git_revision_short_hash() -> str:
 
 
 def get_version():
-    is_updated = subprocess.check_output("git status -uno",shell=True).decode("ascii")
+    is_updated = subprocess.check_output("git status -uno", shell=True).decode("ascii")
 
     if "modified" in is_updated:
         is_updated = None
