@@ -41,8 +41,7 @@ class CogsManagement(commands.Cog):
         """
         cog = "src." + cog
         try:
-            await self.bot.unload_extension(cog)
-            await self.bot.load_extension(cog)
+            await self.bot.reload_extension(cog)
         except Exception as e:
             await ctx.send(f"**`ERROR:`** {type(e).__name__} - {e}")
         else:
@@ -60,8 +59,7 @@ class CogsManagement(commands.Cog):
             if not cog.endswith(".py"):
                 continue
             try:
-                await self.bot.unload_extension("src." + cog[:-3])
-                await self.bot.load_extension("src." + cog[:-3])
+                await self.bot.reload_extension("src." + cog[:-3])
             except Exception as e:
                 await ctx.send(f"**`ERROR:`** {type(e).__name__} - {e}")
             else:
