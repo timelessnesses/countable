@@ -1,20 +1,30 @@
+import difflib
+import io
+import sys
 import traceback
-from difflib import get_close_matches
 
 import discord
 from discord.ext import commands
+from discord.utils import MISSING
 
 
-class Errors(commands.Cog):
-    def __init__(self, bot: commands.Bot) -> None:
+class Events(commands.Cog):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, error: Exception) -> None:
-        traceback.print_exception(type(error), error, error.__traceback__)
-        self.bot.log.exception("")
+    async def on_command_error(self, ctx: commands.Context, error: Exception):
+        python_version = sys.version_info
+        error_message = "".join(
+            traceback.format_exception(type(error), error, error.__traceback__)
+        )
+        discord_version = discord.__version__
+        file = MISSING
+        if len(error_message) <= 4096:
+            file = discord.File(io.StringIO(error_message), filename="errorlog.py")
+            error_message = "Error is too long consider reading the errorlog.py file."
         if isinstance(error, commands.CommandNotFound):
-            matches = get_close_matches(ctx.bot.commands, ctx.invoked_with)
+            matches = difflib.get_close_matches(ctx.bot.commands, ctx.invoked_with)
             if len(matches) >= 2:
                 await ctx.send(
                     embed=discord.Embed(
@@ -51,7 +61,7 @@ class Errors(commands.Cog):
             await ctx.send(
                 embed=discord.Embed(
                     title="Bad argument",
-                    description=f"{error.param.name} is not a valid.\n```py\nBadArgument: {str(error)}\n```",
+                    description=f"Argument conversion failed.\n```py\nBadArgument: {str(error)}\n```",
                     color=discord.Color.red(),
                 )
             )
@@ -73,19 +83,26 @@ class Errors(commands.Cog):
                     color=discord.Color.red(),
                 )
             )
-
         else:
-            exception = "".join(
-                traceback.format_exception(type(error), error, error.__traceback__)
-            )
             await ctx.send(
-                embed=discord.Embed(
-                    title="An error occurred",
-                    description=f"```py\n{exception}\n```",
-                    color=discord.Color.red(),
-                )
+                embed=(
+                    (
+                        discord.Embed(
+                            title="Error",
+                            description=f"```py\n{error_message}\n```",
+                            color=0xFF0000,
+                        )
+                    ).add_field(
+                        name="Python Version",
+                        value=f"{python_version[0]}.{python_version[1]}.{python_version[2]}",
+                        inline=True,
+                    )
+                ).add_field(
+                    name="Discord.py Version", value=discord_version, inline=True
+                ),
+                file=file,
             )
 
 
-async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(Errors(bot))
+async def setup(bot: commands.Bot):
+    await bot.add_cog(Events(bot))
