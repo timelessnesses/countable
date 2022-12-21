@@ -36,6 +36,7 @@ This entire came from snaky's idea and inspired by counting bot
 There's 2 types you can host this bot.
 
 - Replit (likely the easiest)
+- Docker (easier than replit and can be scaled)
 - Others (applies to others that they don't show the files publicly)
 
 ## Replit
