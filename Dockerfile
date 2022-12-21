@@ -1,5 +1,6 @@
 FROM alpine
 WORKDIR /bot
+ARG token
 COPY . .
 RUN apk update && apk add postgresql python3-dev make gcc g++ build-base linux-headers
 RUN python3 -m ensurepip
@@ -11,6 +12,5 @@ ENV ALPHABET_DB_USER=postgres
 ENV ALPHABET_DB_PASSWORD=postgres
 ENV ALPHABET_DB_NAME=postgres
 ENV JISHAKU_HIDE=1
-ARG token
 ENV ALPHABET_TOKEN=$token
 CMD make
