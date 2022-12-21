@@ -69,6 +69,17 @@ IS_REPLIT=any value (this is for replit)
 
 Start repl up and you should be good to go(?)
 
+## Docker
+
+Pull it
+```bash
+docker pull ghcr.io/timelessnesses/countable:main
+```
+then start it with
+```
+docker run ghcr.io/timelessnesses/countable -e ALPHABET_TOKEN=token
+```
+
 ## Others
 
 Rename .env.example to .env and add your env vars.
