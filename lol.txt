@@ -1,0 +1,328 @@
+-- Logs begin at Wed 2022-11-16 13:16:44 UTC, end at Wed 2022-12-21 12:09:13 UTC. --
+Dec 18 14:21:57 somethingcp-10161 systemd[1]: Started Snowcodes bot.
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]: Ignoring exception in on_application_command_error
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]: Traceback (most recent call last):
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 124, in wrapped
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:     ret = await coro(arg)
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 976, in _invoke
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:     await self.callback(self.cog, ctx, **kwargs)
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:   File "/bot/bot/exts/rps.py", line 214, in rps_cmd
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:     return await inter.response.send_message(
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]: NameError: name 'inter' is not defined
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]: The above exception was the direct cause of the following exception:
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]: Traceback (most recent call last):
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 377, in _run_event
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:     await coro(*args, **kwargs)
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:   File "/bot/bot/bot.py", line 36, in on_application_command_error
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:     raise exception
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/bot.py", line 1114, in invoke_application_command
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:     await ctx.command.invoke(ctx)
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 375, in invoke
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:     await injected(ctx)
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 132, in wrapped
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]:     raise ApplicationCommandInvokeError(exc) from exc
+Dec 18 14:31:33 somethingcp-10161 docker[2923364]: discord.errors.ApplicationCommandInvokeError: Application Command raised an exception: NameError: name 'inter' is not defined
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]: Ignoring exception in on_application_command_error
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]: Traceback (most recent call last):
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 124, in wrapped
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:     ret = await coro(arg)
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 976, in _invoke
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:     await self.callback(self.cog, ctx, **kwargs)
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:   File "/bot/bot/exts/rps.py", line 214, in rps_cmd
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:     return await inter.response.send_message(
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]: NameError: name 'inter' is not defined
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]: The above exception was the direct cause of the following exception:
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]: Traceback (most recent call last):
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 377, in _run_event
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:     await coro(*args, **kwargs)
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:   File "/bot/bot/bot.py", line 36, in on_application_command_error
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:     raise exception
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/bot.py", line 1114, in invoke_application_command
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:     await ctx.command.invoke(ctx)
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 375, in invoke
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:     await injected(ctx)
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 132, in wrapped
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]:     raise ApplicationCommandInvokeError(exc) from exc
+Dec 18 14:58:35 somethingcp-10161 docker[2923364]: discord.errors.ApplicationCommandInvokeError: Application Command raised an exception: NameError: name 'inter' is not defined
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]: Ignoring exception in on_application_command_error
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]: Traceback (most recent call last):
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 124, in wrapped
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:     ret = await coro(arg)
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 976, in _invoke
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:     await self.callback(self.cog, ctx, **kwargs)
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:   File "/bot/bot/exts/rps.py", line 214, in rps_cmd
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:     return await inter.response.send_message(
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]: NameError: name 'inter' is not defined
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]: The above exception was the direct cause of the following exception:
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]: Traceback (most recent call last):
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 377, in _run_event
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:     await coro(*args, **kwargs)
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:   File "/bot/bot/bot.py", line 36, in on_application_command_error
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:     raise exception
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/bot.py", line 1114, in invoke_application_command
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:     await ctx.command.invoke(ctx)
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 375, in invoke
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:     await injected(ctx)
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 132, in wrapped
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]:     raise ApplicationCommandInvokeError(exc) from exc
+Dec 18 15:02:05 somethingcp-10161 docker[2923364]: discord.errors.ApplicationCommandInvokeError: Application Command raised an exception: NameError: name 'inter' is not defined
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]: Task exception was never retrieved
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]: future: <Task finished name='discord-ui-view-timeout-dd92835766e0ea56d3998557dc31cdc0' coro=<Amongus.on_timeout() done, defined at /bot/bot/exts/amongus.py:60> exception=HTTPException('400 Bad Request (error code: 50035): Invalid Form Body\nIn embeds.0.fields.2.value: This field is required')>
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]: Traceback (most recent call last):
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]:   File "/bot/bot/exts/amongus.py", line 80, in on_timeout
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]:     await self.message.edit(
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 1194, in edit
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]:     return await self._state._interaction.edit_original_response(
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 428, in edit_original_response
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]:     data = await adapter.edit_original_interaction_response(
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]:   File "/usr/local/lib/python3.10/site-packages/discord/webhook/async_.py", line 217, in request
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]:     raise HTTPException(response, data)
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]: discord.errors.HTTPException: 400 Bad Request (error code: 50035): Invalid Form Body
+Dec 18 15:09:50 somethingcp-10161 docker[2923364]: In embeds.0.fields.2.value: This field is required
+Dec 18 17:39:45 somethingcp-10161 systemd[1]: Stopping Snowcodes bot...
+Dec 18 17:39:46 somethingcp-10161 systemd[1]: snowcodes.service: Succeeded.
+Dec 18 17:39:46 somethingcp-10161 systemd[1]: Stopped Snowcodes bot.
+Dec 18 17:39:46 somethingcp-10161 systemd[1]: Started Snowcodes bot.
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]: Ignoring exception in on_application_command_error
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 124, in wrapped
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:     ret = await coro(arg)
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 976, in _invoke
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:     await self.callback(self.cog, ctx, **kwargs)
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:   File "/bot/bot/exts/rps.py", line 214, in rps_cmd
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:     return await inter.response.send_message(
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]: NameError: name 'inter' is not defined
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]: The above exception was the direct cause of the following exception:
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 377, in _run_event
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:     await coro(*args, **kwargs)
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:   File "/bot/bot/bot.py", line 36, in on_application_command_error
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:     raise exception
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/bot.py", line 1114, in invoke_application_command
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:     await ctx.command.invoke(ctx)
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 375, in invoke
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:     await injected(ctx)
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 132, in wrapped
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]:     raise ApplicationCommandInvokeError(exc) from exc
+Dec 18 19:11:54 somethingcp-10161 docker[2929036]: discord.errors.ApplicationCommandInvokeError: Application Command raised an exception: NameError: name 'inter' is not defined
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]: Ignoring exception in on_application_command_error
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 124, in wrapped
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:     ret = await coro(arg)
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 976, in _invoke
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:     await self.callback(self.cog, ctx, **kwargs)
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:   File "/bot/bot/exts/rps.py", line 214, in rps_cmd
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:     return await inter.response.send_message(
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]: NameError: name 'inter' is not defined
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]: The above exception was the direct cause of the following exception:
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 377, in _run_event
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:     await coro(*args, **kwargs)
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:   File "/bot/bot/bot.py", line 36, in on_application_command_error
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:     raise exception
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/bot.py", line 1114, in invoke_application_command
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:     await ctx.command.invoke(ctx)
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 375, in invoke
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:     await injected(ctx)
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 132, in wrapped
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]:     raise ApplicationCommandInvokeError(exc) from exc
+Dec 18 19:12:17 somethingcp-10161 docker[2929036]: discord.errors.ApplicationCommandInvokeError: Application Command raised an exception: NameError: name 'inter' is not defined
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]: Ignoring exception in on_application_command_error
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 124, in wrapped
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:     ret = await coro(arg)
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 976, in _invoke
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:     await self.callback(self.cog, ctx, **kwargs)
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:   File "/bot/bot/exts/rps.py", line 214, in rps_cmd
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:     return await inter.response.send_message(
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]: NameError: name 'inter' is not defined
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]: The above exception was the direct cause of the following exception:
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 377, in _run_event
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:     await coro(*args, **kwargs)
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:   File "/bot/bot/bot.py", line 36, in on_application_command_error
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:     raise exception
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/bot.py", line 1114, in invoke_application_command
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:     await ctx.command.invoke(ctx)
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 375, in invoke
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:     await injected(ctx)
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 132, in wrapped
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]:     raise ApplicationCommandInvokeError(exc) from exc
+Dec 18 19:12:25 somethingcp-10161 docker[2929036]: discord.errors.ApplicationCommandInvokeError: Application Command raised an exception: NameError: name 'inter' is not defined
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]: Ignoring exception in on_application_command_error
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 124, in wrapped
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:     ret = await coro(arg)
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 976, in _invoke
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:     await self.callback(self.cog, ctx, **kwargs)
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:   File "/bot/bot/exts/rps.py", line 214, in rps_cmd
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:     return await inter.response.send_message(
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]: NameError: name 'inter' is not defined
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]: The above exception was the direct cause of the following exception:
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 377, in _run_event
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:     await coro(*args, **kwargs)
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:   File "/bot/bot/bot.py", line 36, in on_application_command_error
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:     raise exception
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/bot.py", line 1114, in invoke_application_command
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:     await ctx.command.invoke(ctx)
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 375, in invoke
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:     await injected(ctx)
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 132, in wrapped
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]:     raise ApplicationCommandInvokeError(exc) from exc
+Dec 18 19:20:03 somethingcp-10161 docker[2929036]: discord.errors.ApplicationCommandInvokeError: Application Command raised an exception: NameError: name 'inter' is not defined
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]: Ignoring exception in on_application_command_error
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 124, in wrapped
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:     ret = await coro(arg)
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 976, in _invoke
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:     await self.callback(self.cog, ctx, **kwargs)
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:   File "/bot/bot/exts/rps.py", line 214, in rps_cmd
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:     return await inter.response.send_message(
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]: NameError: name 'inter' is not defined
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]: The above exception was the direct cause of the following exception:
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 377, in _run_event
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:     await coro(*args, **kwargs)
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:   File "/bot/bot/bot.py", line 36, in on_application_command_error
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:     raise exception
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/bot.py", line 1114, in invoke_application_command
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:     await ctx.command.invoke(ctx)
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 375, in invoke
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:     await injected(ctx)
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 132, in wrapped
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]:     raise ApplicationCommandInvokeError(exc) from exc
+Dec 18 20:33:09 somethingcp-10161 docker[2929036]: discord.errors.ApplicationCommandInvokeError: Application Command raised an exception: NameError: name 'inter' is not defined
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]: Ignoring exception in on_application_command_error
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 124, in wrapped
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:     ret = await coro(arg)
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 976, in _invoke
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:     await self.callback(self.cog, ctx, **kwargs)
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:   File "/bot/bot/exts/rps.py", line 214, in rps_cmd
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:     return await inter.response.send_message(
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]: NameError: name 'inter' is not defined
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]: The above exception was the direct cause of the following exception:
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]: Traceback (most recent call last):
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 377, in _run_event
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:     await coro(*args, **kwargs)
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:   File "/bot/bot/bot.py", line 36, in on_application_command_error
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:     raise exception
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/bot.py", line 1114, in invoke_application_command
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:     await ctx.command.invoke(ctx)
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 375, in invoke
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:     await injected(ctx)
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:   File "/usr/local/lib/python3.10/site-packages/discord/commands/core.py", line 132, in wrapped
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]:     raise ApplicationCommandInvokeError(exc) from exc
+Dec 18 20:38:20 somethingcp-10161 docker[2929036]: discord.errors.ApplicationCommandInvokeError: Application Command raised an exception: NameError: name 'inter' is not defined
+Dec 18 22:15:04 somethingcp-10161 systemd[1]: Stopping Snowcodes bot...
+Dec 18 22:15:05 somethingcp-10161 systemd[1]: snowcodes.service: Succeeded.
+Dec 18 22:15:05 somethingcp-10161 systemd[1]: Stopped Snowcodes bot.
+Dec 18 22:15:05 somethingcp-10161 systemd[1]: Started Snowcodes bot.
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]: Ignoring exception in view <Bigrat timeout=90 children=4> for item <BoxButton style=<ButtonStyle.danger: 4> url=None disabled=True label='⠀' emoji=None row=None>:
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]: Traceback (most recent call last):
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:   File "/usr/local/lib/python3.10/site-packages/discord/ui/view.py", line 414, in _scheduled_task
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:     await item.callback(interaction)
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:   File "/bot/bot/exts/bigrat.py", line 32, in callback
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:     await self.view.lost()
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:   File "/bot/bot/exts/bigrat.py", line 80, in lost
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:     await self.message.edit(embed=lose_embed, view=self, file=None)
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 1194, in edit
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:     return await self._state._interaction.edit_original_response(
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 415, in edit_original_response
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:     params = handle_message_parameters(
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:   File "/usr/local/lib/python3.10/site-packages/discord/webhook/async_.py", line 672, in handle_message_parameters
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]:     "value": file.fp,
+Dec 19 05:22:25 somethingcp-10161 docker[2935401]: AttributeError: 'NoneType' object has no attribute 'fp'
+Dec 20 23:24:09 somethingcp-10161 systemd[1]: Stopping Snowcodes bot...
+Dec 20 23:24:10 somethingcp-10161 systemd[1]: snowcodes.service: Succeeded.
+Dec 20 23:24:10 somethingcp-10161 systemd[1]: Stopped Snowcodes bot.
+Dec 20 23:24:10 somethingcp-10161 systemd[1]: Started Snowcodes bot.
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]: Ignoring exception in view <Bigrat timeout=90 children=4> for item <BoxButton style=<ButtonStyle.danger: 4> url=None disabled=True label='⠀' emoji=None row=None>:
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]: Traceback (most recent call last):
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/ui/view.py", line 414, in _scheduled_task
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:     await item.callback(interaction)
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:   File "/bot/bot/exts/bigrat.py", line 32, in callback
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:     await self.view.lost()
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:   File "/bot/bot/exts/bigrat.py", line 80, in lost
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:     await self.message.edit(embed=lose_embed, view=self, file=None)
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 1194, in edit
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:     return await self._state._interaction.edit_original_response(
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 415, in edit_original_response
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:     params = handle_message_parameters(
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/webhook/async_.py", line 672, in handle_message_parameters
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]:     "value": file.fp,
+Dec 21 08:25:25 somethingcp-10161 docker[2985048]: AttributeError: 'NoneType' object has no attribute 'fp'
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]: Ignoring exception in view <Bigrat timeout=90 children=4> for item <BoxButton style=<ButtonStyle.danger: 4> url=None disabled=True label='⠀' emoji=None row=None>:
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]: Traceback (most recent call last):
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/ui/view.py", line 414, in _scheduled_task
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:     await item.callback(interaction)
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:   File "/bot/bot/exts/bigrat.py", line 32, in callback
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:     await self.view.lost()
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:   File "/bot/bot/exts/bigrat.py", line 80, in lost
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:     await self.message.edit(embed=lose_embed, view=self, file=None)
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 1194, in edit
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:     return await self._state._interaction.edit_original_response(
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 415, in edit_original_response
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:     params = handle_message_parameters(
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/webhook/async_.py", line 672, in handle_message_parameters
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]:     "value": file.fp,
+Dec 21 08:25:55 somethingcp-10161 docker[2985048]: AttributeError: 'NoneType' object has no attribute 'fp'
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]: Ignoring exception in view <Bigrat timeout=90 children=4> for item <BoxButton style=<ButtonStyle.danger: 4> url=None disabled=True label='⠀' emoji=None row=None>:
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]: Traceback (most recent call last):
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/ui/view.py", line 414, in _scheduled_task
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:     await item.callback(interaction)
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:   File "/bot/bot/exts/bigrat.py", line 32, in callback
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:     await self.view.lost()
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:   File "/bot/bot/exts/bigrat.py", line 80, in lost
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:     await self.message.edit(embed=lose_embed, view=self, file=None)
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 1194, in edit
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:     return await self._state._interaction.edit_original_response(
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 415, in edit_original_response
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:     params = handle_message_parameters(
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/webhook/async_.py", line 672, in handle_message_parameters
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]:     "value": file.fp,
+Dec 21 08:27:15 somethingcp-10161 docker[2985048]: AttributeError: 'NoneType' object has no attribute 'fp'
+Dec 21 09:33:01 somethingcp-10161 systemd[1]: Stopping Snowcodes bot...
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]: Traceback (most recent call last):
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:     return _run_code(code, main_globals, None,
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/runpy.py", line 86, in _run_code
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:     exec(code, run_globals)
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:   File "/bot/bot/__main__.py", line 30, in <module>
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:     main()
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:   File "/bot/bot/__main__.py", line 26, in main
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:     bot.run(getenv("DISCORD_TOKEN"))
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 712, in run
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:     _cleanup_loop(loop)
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 108, in _cleanup_loop
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:     _cancel_tasks(loop)
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/site-packages/discord/client.py", line 90, in _cancel_tasks
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:     loop.run_until_complete(asyncio.gather(*tasks, return_exceptions=True))
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:   File "/usr/local/lib/python3.10/asyncio/base_events.py", line 647, in run_until_complete
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]:     raise RuntimeError('Event loop stopped before Future completed.')
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]: RuntimeError: Event loop stopped before Future completed.
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]: Task was destroyed but it is pending!
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]: task: <Task pending name='Task-1' coro=<Client.run.<locals>.runner() running at /usr/local/lib/python3.10/site-packages/discord/client.py:698> wait_for=<Future pending cb=[Task.task_wakeup()]> cb=[gather.<locals>._done_callback() at /usr/local/lib/python3.10/asyncio/tasks.py:720]>
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]: Unclosed client session
+Dec 21 09:33:02 somethingcp-10161 docker[2985048]: client_session: <aiohttp.client.ClientSession object at 0x7ff5a87a3640>
+Dec 21 09:33:03 somethingcp-10161 systemd[1]: snowcodes.service: Main process exited, code=exited, status=1/FAILURE
+Dec 21 09:33:03 somethingcp-10161 systemd[1]: snowcodes.service: Failed with result 'exit-code'.
+Dec 21 09:33:03 somethingcp-10161 systemd[1]: Stopped Snowcodes bot.
+-- Reboot --
+Dec 21 12:06:28 somethingcp-10161 systemd[1]: Started Snowcodes bot.
+Dec 21 12:07:38 somethingcp-10161 docker[3516]: Ignoring exception in view <Bigrat timeout=90 children=4> for item <BoxButton style=<ButtonStyle.danger: 4> url=None disabled=True label='⠀' emoji=None row=None>:
+Dec 21 12:07:38 somethingcp-10161 docker[3516]: Traceback (most recent call last):
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:   File "/usr/local/lib/python3.10/site-packages/discord/ui/view.py", line 414, in _scheduled_task
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:     await item.callback(interaction)
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:   File "/bot/bot/exts/bigrat.py", line 32, in callback
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:     await self.view.lost()
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:   File "/bot/bot/exts/bigrat.py", line 80, in lost
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:     await self.message.edit(embed=lose_embed, view=self, file=None)
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 1194, in edit
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:     return await self._state._interaction.edit_original_response(
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:   File "/usr/local/lib/python3.10/site-packages/discord/interactions.py", line 415, in edit_original_response
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:     params = handle_message_parameters(
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:   File "/usr/local/lib/python3.10/site-packages/discord/webhook/async_.py", line 672, in handle_message_parameters
+Dec 21 12:07:38 somethingcp-10161 docker[3516]:     "value": file.fp,
+Dec 21 12:07:38 somethingcp-10161 docker[3516]: AttributeError: 'NoneType' object has no attribute 'fp'

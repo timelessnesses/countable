@@ -1,3 +1,4 @@
+
 try:
     import uvloop
 
@@ -46,7 +47,7 @@ log.addHandler(f)
 
 logging.getLogger("discord").setLevel(logging.WARNING)  # mute
 
-bot = commands.Bot(command_prefix="a!", intents=discord.Intents.all())
+bot = commands.AutoShardedBot(command_prefix="a!", intents=discord.Intents.all(),owner_ids=[467718535897022479,890913140278181909])
 bot.log = log
 
 observer = Observer()
