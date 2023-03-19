@@ -1,6 +1,5 @@
 FROM alpine
 WORKDIR /bot
-ARG token
 COPY . .
 RUN apk update && apk add postgresql python3-dev make gcc g++ build-base linux-headers
 RUN python3 -m ensurepip
