@@ -1,0 +1,13 @@
+[package]
+name = "countable"
+version = "0.1.0"
+edition = "2021"
+
+[registries.crates-io]
+protocol = "sparse" # h
+
+[dependencies]
+dotenv = "0.15.0"
+serenity = {version="0.11.5", features=["framework", "standard_framework"]}
+tokio = {version="1.26.0", features=["full"]}
+tokio-postgres = "0.7.7"
