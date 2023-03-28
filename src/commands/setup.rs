@@ -1,8 +1,11 @@
-use serenity;
 use crate::NecessaryDatas;
+use serenity;
 
 #[serenity::framework::standard::macros::command]
-pub async fn setup(ctx: &serenity::client::Context, msg: &serenity::model::channel::Message) -> serenity::framework::standard::CommandResult {
+pub async fn setup(
+    ctx: &serenity::client::Context,
+    msg: &serenity::model::channel::Message,
+) -> serenity::framework::standard::CommandResult {
     let data = ctx.data.read().await;
     let a = data.get::<NecessaryDatas>().unwrap();
     let a_clone = a.clone();

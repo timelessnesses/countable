@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use dotenv;
 use serenity;
 use std;
@@ -15,7 +17,8 @@ impl serenity::client::EventHandler for Handler {
 }
 
 struct Necessary {
-    database: tokio_postgres::Client,
+    database: tokio_postgres::Client, // mute this dead code
+    http: serenity::http::Http
 }
 
 struct NecessaryDatas;
@@ -26,7 +29,7 @@ impl serenity::prelude::TypeMapKey for NecessaryDatas {
 
 impl std::fmt::Debug for Necessary {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Necessary {{ database: tokio_postgres::Client }}")
+        write!(f, "Necessary {{ database: tokio_postgres::Client, http: serenity::http::Http }}")
     }
 }
 
@@ -86,7 +89,10 @@ async fn main() {
         .data
         .write()
         .await
-        .insert::<NecessaryDatas>(Necessary { database: database });
+        .insert::<NecessaryDatas>(Necessary {
+            database: database,
+            http: http,
+        });
 
     if let Err(why) = client.start().await {
         println!("Client error: {:?}", why);
