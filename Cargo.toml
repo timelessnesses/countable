@@ -8,6 +8,8 @@ protocol = "sparse" # h
 
 [dependencies]
 dotenv = "0.15.0"
+lazy_static = "1.4.0"
+parking_lot = "0.12.1"
 serenity = {version="0.11.5", features=["framework", "standard_framework"]}
 tokio = {version="1.26.0", features=["full"]}
 tokio-postgres = "0.7.7"
