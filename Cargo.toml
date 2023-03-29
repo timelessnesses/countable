@@ -7,9 +7,11 @@ edition = "2021"
 protocol = "sparse" # h
 
 [dependencies]
+chrono = "0.4.24"
 dotenv = "0.15.0"
 lazy_static = "1.4.0"
 parking_lot = "0.12.1"
+rand = "0.8.5"
 serenity = {version="0.11.5", features=["framework", "standard_framework","cache"]}
 tokio = {version="1.26.0", features=["full"]}
 tokio-postgres = "0.7.7"

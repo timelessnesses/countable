@@ -1,5 +1,7 @@
 use crate::NecessaryDatas;
 use serenity;
+use rand;
+use chrono;
 
 struct Handler;
 
@@ -17,6 +19,15 @@ impl Handler {
         }
 
         return column_helper(num, "");
+    }
+
+    fn random_id(&self,length: i64) -> String {
+        let things = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let mut id = String::new();
+        for _ in 0..length {
+            id.push(things.chars().nth(rand::random::<usize>() % things.len()).unwrap());
+        }
+        return id;
     }
 }
 
@@ -71,5 +82,83 @@ impl serenity::client::EventHandler for Handler {
         if msg.channel_id != countable_channel.unwrap().id {
             return;
         }
+        let previous_person = database.query(
+            "SELECT previous_person FROM counting WHERE guild_id = $1",
+            &[&guild_id],
+        ).await.unwrap();
+
+        if previous_person.is_empty() {
+            return
+        }
+        let previous_count = database.query(
+            "SELECT count_number FROM counting WHERE guild_id = $1",
+            &[&guild_id]
+        ).await.unwrap();
+        if previous_count.is_empty() {
+            return
+        }
+        let is_same_person = database.query(
+            "SELECT is_same_person FROM config WHERE guild_id = $1",
+            &[&guild_id],
+        ).await.unwrap();
+        if is_same_person.is_empty() {
+            return
+        }
+
+        if previous_person[0].get::<usize,Option<String>>(0) == None {
+            database.execute(
+                "UPDATE counting SET previous_person = $1 WHERE guild_id = $2",
+                &[&msg.author.id.to_string().parse::<i64>().unwrap(), &guild_id],
+            ).await.unwrap();
+        }
+        else if (previous_person[0].get::<usize,Option<String>>(0).unwrap().parse::<i64>().unwrap() == msg.author.id.to_string().parse::<i64>().unwrap()) && (is_same_person[0].get::<usize,Option<bool>>(0).unwrap() == false) {
+            msg.react(&necessary.http, serenity::model::channel::ReactionType::Unicode(String::from("❌"))).await.unwrap();
+            let id = self.random_id(10);
+            let now = chrono::Utc::now();
+            let embed = serenity::builder::CreateEmbed::default()
+            .title("You can't chain alphabets")
+            .color(serenity::utils::Color::RED)
+            .timestamp(now)
+            .field(
+                "Reason",
+                "You can't chain multiple alphabets! (Is same person feature is not turned on also note that turning it on makes your progress not shown in the leaderboard!)",
+                false
+            )
+            .field(
+                "Log ID",
+                id,
+                false
+            )
+            .field(
+                "Ruined by",
+                msg.author.to_string(),
+                false
+            )
+            .field(
+                "Time",
+                now,
+                false
+            )
+            .field(
+                "How to prevent",
+                "Don't saying next alphabets (or same one) by yourself! Give that opportunity to others!",
+                false
+            );
+            msg.send(&necessary.http, |m| {
+                m.embed(|e|{
+                    e = embed
+                })
+            }).await;
+
+            return
+        }
+        else {
+            database.execute(
+                "UPDATE counting SET previous_person = $1 WHERE guild_id = $2",
+                &[&msg.author.id.to_string().parse::<i64>().unwrap(), &guild_id],
+            ).await.unwrap();
+        }
+        println!("{}",previous_person[0].get::<usize,String>(0));
+
     }
 }
