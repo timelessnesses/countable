@@ -1,3 +1,12 @@
+#![allow(stable_features)]
+#![warn(
+    rust_2018_idioms,
+    missing_copy_implementations,
+    noop_method_call,
+    unused
+)]
+#![warn(clippy::pedantic)]
+
 // rewrite of countable using poise
 
 use chrono;
@@ -66,6 +75,9 @@ async fn main() {
                 ..Default::default()
             },
             commands: vec![commands::stuffs()],
+            event_handler: |ctx, event, framework, u| {
+                std::boxed::Box::pin(events::listener(ctx, event, framework, u))
+            },
             ..Default::default()
         })
         .token(std::env::var("COUNTABLE_DISCORD_TOKEN").expect(
