@@ -5,13 +5,16 @@ edition = "2021"
 
 [registries.crates-io]
 protocol = "sparse" # h
+# why sparse doesn't work ;w;
 
 [dependencies]
 chrono = "0.4.24"
 dotenv = "0.15.0"
 lazy_static = "1.4.0"
 parking_lot = "0.12.1"
+poise = "0.5.2"
 rand = "0.8.5"
-serenity = {version="0.11.5", features=["framework", "standard_framework","cache"]}
+serenity = {version="0.11.5", features=["cache"]}
+sysinfo = "0.28.4"
 tokio = {version="1.26.0", features=["full"]}
 tokio-postgres = "0.7.7"

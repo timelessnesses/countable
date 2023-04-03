@@ -1,0 +1,1 @@
+why tf cargo fmt removes `return`

@@ -1,102 +1,88 @@
-#![allow(dead_code)]
+// rewrite of countable using poise
 
+use chrono;
 use dotenv;
-use serenity;
+use poise;
+use poise::serenity_prelude as poise_serenity;
 use std;
 use tokio;
 use tokio_postgres;
+// commands and events import
 
 mod commands;
-struct Handler;
+mod events;
+mod utils;
 
-#[serenity::async_trait]
-impl serenity::client::EventHandler for Handler {
-    async fn ready(&self, _: serenity::client::Context, ready: serenity::model::gateway::Ready) {
-        println!("{} is connected!", ready.user.name);
-    }
+pub struct Things {
+    database: std::sync::Arc<tokio_postgres::Client>,
+    up_when: chrono::DateTime<chrono::Local>,
 }
 
-struct Necessary {
-    database: tokio_postgres::Client, // mute this dead code
-    http: serenity::http::Http
+pub type Error = Box<dyn std::error::Error + Send + Sync>;
+pub type Context<'a> = poise::Context<'a, Things, Error>;
+
+impl poise_serenity::TypeMapKey for Things {
+    type Value = std::sync::Arc<Things>;
 }
 
-struct NecessaryDatas;
-
-impl serenity::prelude::TypeMapKey for NecessaryDatas {
-    type Value = Necessary;
-}
-
-impl std::fmt::Debug for Necessary {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "Necessary {{ database: tokio_postgres::Client, http: serenity::http::Http }}")
-    }
-}
-
-#[tokio::main]
-async fn main() {
+async fn connect_to_db() -> Result<tokio_postgres::Client, ()> {
     dotenv::dotenv().ok();
-
-    // database stuff
-    let (database, connection) = tokio_postgres::connect(
-        &format!(
-            "host={} port={} user={} password={} dbname={}",
-            std::env::var("COUNTABLE_DB_HOST").expect("No Database Host?"),
-            std::env::var("COUNTABLE_DB_PORT").expect("No Database Port?"),
-            std::env::var("COUNTABLE_DB_USERNAME").expect("No Database Username?"),
-            std::env::var("COUNTABLE_DB_PASSWORD").expect("No password found"), // this is optional
-            std::env::var("COUNTABLE_DB_NAME").expect("No Database Name?")
-        ),
+    let (db, conn) = tokio_postgres::connect(
+        format!(
+            "host={} port={} user={} password={} database={}",
+            std::env::var("COUNTABLE_POSTGRES_HOST").unwrap_or_else(|_| {
+                return "localhost".to_string();
+            }),
+            std::env::var("COUNTABLE_POSTGRES_PORT").unwrap_or_else(|_| {
+                return "5432".to_string();
+            }),
+            std::env::var("COUNTABLE_POSTGRES_USER").unwrap(),
+            std::env::var("COUNTABLE_POSTGRES_PASSWORD").unwrap_or_else(|_| {
+                return "".to_string();
+            }),
+            std::env::var("COUNTABLE_POSTGRES_DATABASE").unwrap()
+        )
+        .as_str(),
         tokio_postgres::NoTls,
     )
     .await
     .unwrap();
 
-    tokio::spawn(async move {
-        if let Err(e) = connection.await {
-            eprintln!("connection error: {}", e);
-        }
-    });
-
-    // discord stuff
-
-    let token = std::env::var("COUNTABLE_DISCORD_TOKEN").expect("No Discord Token?");
-    let http = serenity::http::Http::new(&token);
-    let (owners, _bot_id) = match http.get_current_application_info().await {
-        Ok(info) => {
-            let mut owners = std::collections::HashSet::new();
-            owners.insert(info.owner.id);
-            (owners, info.id)
-        }
-        Err(why) => panic!("Could not access application info: {:?}", why),
-    };
-    let bot = serenity::framework::standard::StandardFramework::new().configure(|c| {
-        c.prefix("a!");
-        c.allow_dm(false);
-        c.case_insensitivity(true);
-        c.ignore_bots(true);
-        c.owners(owners);
-        return c;
-    });
-
-    let mut client = serenity::Client::builder(&token, serenity::prelude::GatewayIntents::all())
-        .framework(bot)
-        .event_handler(Handler)
-        .await
-        .expect("Error creating client");
-
-    client
-        .data
-        .write()
-        .await
-        .insert::<NecessaryDatas>(Necessary {
-            database: database,
-            http: http,
-        });
-
-    if let Err(why) = client.start().await {
-        println!("Client error: {:?}", why);
+    if let Err(_) = conn.await {
+        return Err(());
     }
 
-    return (); // why tf you expect ()
+    return Ok(db);
+}
+
+#[tokio::main]
+async fn main() {
+    let db = connect_to_db().await.unwrap();
+    let bot = poise::Framework::builder()
+        .options(poise::FrameworkOptions {
+            prefix_options: poise::PrefixFrameworkOptions {
+                mention_as_prefix: true,
+                prefix: Some("c!".into()),
+                ..Default::default()
+            },
+            commands: vec![commands::stuffs()],
+            ..Default::default()
+        })
+        .token(std::env::var("COUNTABLE_DISCORD_TOKEN").expect(
+            "COUNTABLE_DISCORD_TOKEN not set neither in enviroment variables nor in .env file",
+        ))
+        .intents(poise_serenity::GatewayIntents::all())
+        .setup(|ctx, _ready, framework| {
+            Box::pin(async move {
+                poise::builtins::register_globally(ctx, &framework.options().commands)
+                    .await
+                    .unwrap();
+                return Ok(Things {
+                    database: db.into(),
+                    up_when: chrono::Local::now(),
+                });
+            })
+        }) // it works now?????
+        .initialize_owners(true);
+    bot.run_autosharded().await.unwrap();
 }
