@@ -1,0 +1,27 @@
+name: Rust
+
+on:
+  push:
+    branches: [ "rust" ]
+  pull_request:
+    branches: [ "rust" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build_linux:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Test if build successfully
+      run: cargo build --verbose -r
+  build_windows:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Test if build successfully
+      run: cargo build --verbose -r
