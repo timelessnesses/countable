@@ -1,4 +1,5 @@
 use crate::utils::datetime::format_duration;
+use crate::utils::github;
 use crate::utils::revision::{get_current_commit, get_last_x_history_commits, BotCurrentStatus};
 use crate::utils::versions::{get_cargo_version, get_rust_compiler_version};
 use crate::{Context, Error};
@@ -6,6 +7,7 @@ use poise;
 use poise::serenity_prelude as poise_serenity;
 use sysinfo::{self, CpuExt, DiskExt, SystemExt};
 
+#[allow(unused_assignments)]
 #[poise::command(prefix_command, slash_command)]
 pub async fn status(ctx: Context<'_>) -> Result<(), Error> {
     ctx.defer().await.unwrap();
@@ -17,7 +19,7 @@ pub async fn status(ctx: Context<'_>) -> Result<(), Error> {
     let data = ctx.data();
     let up_when = data.up_when;
     let up_for = chrono::Local::now() - up_when;
-    let current_commit = get_current_commit();
+    let current_commit = github::convert_hash_id_to_hyperlink(get_current_commit().as_str());
     let mut text = String::new();
     match BotCurrentStatus::get_current_status() {
         BotCurrentStatus::Latest => {
@@ -36,7 +38,9 @@ pub async fn status(ctx: Context<'_>) -> Result<(), Error> {
                 + &String::from(")");
         }
     }
-
+    if text.is_empty() {
+        text = "Unknown Error! (Should not be possible)".to_string();
+    }
     ctx.send(|r| {
         r.embed(|e| {
             return e
@@ -61,7 +65,7 @@ pub async fn status(ctx: Context<'_>) -> Result<(), Error> {
                 )
                 .field("Bot Revision", text, true)
                 .field("Bot Version", env!("CARGO_PKG_VERSION"), true)
-                .field("Last 10 Commits", get_last_x_history_commits(10), true)
+                .field("Last 5 Commits", get_last_x_history_commits(5), true)
                 .timestamp(chrono::prelude::Local::now());
         })
     })

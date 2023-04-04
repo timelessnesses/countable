@@ -1,5 +1,6 @@
 mod on_message;
-use crate::{Context, Error, Things};
+mod on_ready;
+use crate::{Error, Things};
 use poise;
 use poise::serenity_prelude as poise_serenity;
 
@@ -12,6 +13,9 @@ pub async fn listener(
     match event {
         poise::Event::Message { new_message } => {
             on_message::message(ctx, event, framework, things, new_message).await?;
+        }
+        poise::Event::Ready { .. } => {
+            on_ready::ready(ctx, event, framework, things).await?;
         }
         _ => {}
     }

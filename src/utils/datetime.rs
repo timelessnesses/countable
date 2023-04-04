@@ -62,6 +62,14 @@ pub fn format_duration(duration: chrono::Duration) -> String {
         ));
         duration = duration - chrono::Duration::seconds(seconds);
     }
-
+    if result.is_empty() {
+        result.push_str("0 seconds");
+    }
+    if duration > chrono::Duration::zero() {
+        result.push_str(&format!(
+            "{} nanoseconds (please don't ask why I added this)",
+            duration.num_nanoseconds().unwrap()
+        ));
+    }
     return result;
 }

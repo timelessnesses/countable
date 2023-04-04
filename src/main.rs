@@ -11,12 +11,14 @@
 
 use chrono;
 use dotenv;
+use fern;
+use log;
 use poise;
 use poise::serenity_prelude as poise_serenity;
+use serenity;
 use std;
 use tokio;
-use tokio_postgres;
-// commands and events import
+use tokio_postgres; // WHY
 
 mod commands;
 mod events;
@@ -34,39 +36,72 @@ impl poise_serenity::TypeMapKey for Things {
     type Value = std::sync::Arc<Things>;
 }
 
+fn setup_logging() {
+    fern::Dispatch::new()
+        .format(|out, message, record| {
+            out.finish(format_args!(
+                "[{}] [{}] [{}] {}",
+                chrono::Local::now().format("%Y/%m/%d][%H:%M:%S"),
+                record.target(),
+                record.level(),
+                message
+            ))
+        })
+        .level(log::LevelFilter::Debug)
+        .level_for("poise", log::LevelFilter::Debug)
+        .level_for("poise_serenity", log::LevelFilter::Debug)
+        .chain(std::io::stdout())
+        .chain(fern::log_file("countable.log").unwrap())
+        .level_for("tracing", log::LevelFilter::Off)
+        .level_for("h2", log::LevelFilter::Off)
+        .level_for("rustls", log::LevelFilter::Off)
+        .level_for("serenity::client::dispatch", log::LevelFilter::Off)
+        .level_for("serenity::http::ratelimiting", log::LevelFilter::Off)
+        .level_for("serenity::http:request", log::LevelFilter::Off)
+        .apply()
+        .unwrap();
+}
+
 async fn connect_to_db() -> Result<tokio_postgres::Client, ()> {
     dotenv::dotenv().ok();
     let (db, conn) = tokio_postgres::connect(
         format!(
-            "host={} port={} user={} password={} database={}",
-            std::env::var("COUNTABLE_POSTGRES_HOST").unwrap_or_else(|_| {
+            "host={} port={} user={} password={} dbname={}",
+            std::env::var("COUNTABLE_POSTGRES_DB_HOST").unwrap_or_else(|_| {
+                log::warn!("COUNTABLE_POSTGRES_DB_HOST not set, using localhost");
                 return "localhost".to_string();
             }),
-            std::env::var("COUNTABLE_POSTGRES_PORT").unwrap_or_else(|_| {
+            std::env::var("COUNTABLE_POSTGRES_DB_PORT").unwrap_or_else(|_| {
+                log::warn!("COUNTABLE_POSTGRES_DB_PORT not set, using 5432");
                 return "5432".to_string();
             }),
-            std::env::var("COUNTABLE_POSTGRES_USER").unwrap(),
-            std::env::var("COUNTABLE_POSTGRES_PASSWORD").unwrap_or_else(|_| {
+            std::env::var("COUNTABLE_POSTGRES_DB_USER").expect("COUNTABLE_POSTGRES_DB_USER not set"),
+            std::env::var("COUNTABLE_POSTGRES_DB_PASSWORD").unwrap_or_else(|_| {
+                log::warn!("COUNTABLE_POSTGRES_DB_PASSWORD not set, using empty password");
                 return "".to_string();
             }),
-            std::env::var("COUNTABLE_POSTGRES_DATABASE").unwrap()
+            std::env::var("COUNTABLE_POSTGRES_DB_DATABASE").expect(
+                "COUNTABLE_POSTGRES_DB_DATABASE not set neither in enviroment variables nor in .env file")
         )
         .as_str(),
         tokio_postgres::NoTls,
     )
     .await
-    .unwrap();
+    .expect("Failed to connect to database. Are you sure its running?");
 
-    if let Err(_) = conn.await {
-        return Err(());
-    }
+    tokio::spawn(async move {
+        conn.await.expect("Database connection lost");
+    });
 
     return Ok(db);
 }
 
 #[tokio::main]
 async fn main() {
+    setup_logging();
+    log::info!("Initialized Logger");
     let db = connect_to_db().await.unwrap();
+    log::info!("Connected to database");
     let bot = poise::Framework::builder()
         .options(poise::FrameworkOptions {
             prefix_options: poise::PrefixFrameworkOptions {
@@ -95,6 +130,11 @@ async fn main() {
                 });
             })
         }) // it works now?????
-        .initialize_owners(true);
+        .initialize_owners(true)
+        .client_settings(|c| {
+            c.framework(serenity::framework::StandardFramework::new().configure(|c| c.prefix("c!")))
+        });
+    log::info!("Initialized bot");
     bot.run_autosharded().await.unwrap();
+    log::info!("Bot stopped");
 }
