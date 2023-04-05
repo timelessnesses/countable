@@ -1,11 +1,12 @@
 #![allow(stable_features)]
-#![warn(
+#![deny(
     rust_2018_idioms,
     missing_copy_implementations,
     noop_method_call,
     unused
 )]
 #![warn(clippy::pedantic)]
+#![allow(unused_assignments)]
 
 // rewrite of countable using poise
 
@@ -19,7 +20,6 @@ use serenity;
 use std;
 use tokio;
 use tokio_postgres; // WHY
-
 mod commands;
 mod events;
 mod utils;
@@ -63,6 +63,7 @@ fn setup_logging() {
 }
 
 async fn connect_to_db() -> Result<tokio_postgres::Client, ()> {
+    let schema = include_str!("./sqls/countable.sql");
     dotenv::dotenv().ok();
     let (db, conn) = tokio_postgres::connect(
         format!(
@@ -93,12 +94,15 @@ async fn connect_to_db() -> Result<tokio_postgres::Client, ()> {
         conn.await.expect("Database connection lost");
     });
 
+    db.execute(schema, &[]).await.unwrap();
+
     return Ok(db);
 }
 
 #[tokio::main]
 async fn main() {
     setup_logging();
+    log::info!("{}", std::env::var("RUSTC_VERSION").unwrap()); // damn
     log::info!("Initialized Logger");
     let db = connect_to_db().await.unwrap();
     log::info!("Connected to database");

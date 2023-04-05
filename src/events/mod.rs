@@ -12,7 +12,7 @@ pub async fn listener(
 ) -> Result<(), Error> {
     match event {
         poise::Event::Message { new_message } => {
-            on_message::message(ctx, event, framework, things, new_message).await?;
+            on_message::message(ctx, event, things, new_message).await?;
         }
         poise::Event::Ready { .. } => {
             on_ready::ready(ctx, event, framework, things).await?;

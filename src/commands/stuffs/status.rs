@@ -1,7 +1,9 @@
 use crate::utils::datetime::format_duration;
 use crate::utils::github;
-use crate::utils::revision::{get_current_commit, get_last_x_history_commits, BotCurrentStatus};
-use crate::utils::versions::{get_cargo_version, get_rust_compiler_version};
+use crate::utils::revision::{get_current_commit, get_last_5_history_commits, BotCurrentStatus};
+use crate::utils::versions::{
+    get_cargo_version, get_poise_version, get_rust_compiler_version, get_serenity_version,
+};
 use crate::{Context, Error};
 use poise;
 use poise::serenity_prelude as poise_serenity;
@@ -53,19 +55,11 @@ pub async fn status(ctx: Context<'_>) -> Result<(), Error> {
                 .field("Uptime", format_duration(up_for), true)
                 .field("Rust Compiler Version", get_rust_compiler_version(), true)
                 .field("Cargo Version", get_cargo_version(), true)
-                .field(
-                    "Serenity Version",
-                    "Unknown (Still doesn't know how to add this at compile time)",
-                    true,
-                )
-                .field(
-                    "Poise Version",
-                    "Unknown (Still doesn't know how to add this at compile time)",
-                    true,
-                )
+                .field("Serenity Version", get_serenity_version(), true)
+                .field("Poise Version", get_poise_version(), true)
                 .field("Bot Revision", text, true)
                 .field("Bot Version", env!("CARGO_PKG_VERSION"), true)
-                .field("Last 5 Commits", get_last_x_history_commits(5), true)
+                .field("Last 5 Commits", get_last_5_history_commits(), true)
                 .timestamp(chrono::prelude::Local::now());
         })
     })

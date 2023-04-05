@@ -1,22 +1,14 @@
 use crate::utils::github;
-use std;
+
+const CURRENT_COMMIT_ID: &str = include_str!("../data/current_commit_id.txt");
+const LAST_5_COMMIT_HISTORY: &str = include_str!("../data/last_x_commit_history.txt");
+
 pub fn get_current_commit() -> String {
-    let output = std::process::Command::new("git")
-        .args(&["rev-parse", "--short", "HEAD"])
-        .output()
-        .expect("Failed to execute git command");
-    let output = String::from_utf8(output.stdout).unwrap();
-    return output;
+    return CURRENT_COMMIT_ID.to_owned();
 }
 
-pub fn get_last_x_history_commits(x: u128) -> String {
-    let output = std::process::Command::new("git")
-        .args(&["log", "--pretty=%h %s", "-n", &x.to_string()])
-        .output()
-        .expect("Failed to execute git command");
-    let output = String::from_utf8(output.stdout).unwrap();
-    // hyperlink commit hash id to github
-    let output = output.split("\n").collect::<Vec<&str>>();
+pub fn get_last_5_history_commits() -> String {
+    let output = LAST_5_COMMIT_HISTORY.split("\n").collect::<Vec<&str>>();
     let mut ids: Vec<String> = vec![];
     let mut commits: Vec<String> = vec![];
     let mut j = String::new();
@@ -30,7 +22,7 @@ pub fn get_last_x_history_commits(x: u128) -> String {
     for i in 0..ids.len() {
         j += &format!(
             "[{}]({}) {}\n",
-            ids[i],
+            &(ids[i])[0..6],
             github::convert_hash_id_to_hyperlink(ids[i].as_str()),
             format_commit_message(commits[i].as_str())
         )
@@ -44,13 +36,11 @@ pub enum BotCurrentStatus {
     Modified,
 }
 
+const GIT_STATUS: &str = include_str!("../data/git_status.txt");
+
 impl BotCurrentStatus {
     pub fn get_current_status() -> BotCurrentStatus {
-        let is_updated = std::process::Command::new("git")
-            .args(&["status", "-uno"])
-            .output()
-            .expect("Failed to execute git command");
-        let is_updated = String::from_utf8(is_updated.stdout).unwrap();
+        let is_updated = GIT_STATUS.to_owned();
         if is_updated.contains("modified") {
             return BotCurrentStatus::Modified;
         } else if is_updated.contains("up to date")
@@ -68,11 +58,11 @@ fn format_commit_message(message: &str) -> String {
     // sometimes commit message too long and it would just overflows and make newline in field and its ugly
     // so we just cut it off
     // maximum is 23 (not including 3 dots)
-    return if message.len() > 16 {
+    if message.len() > 16 {
         message.truncate(16);
         message += "...";
-        message
+        return message;
     } else {
-        message
+        return message;
     };
 }

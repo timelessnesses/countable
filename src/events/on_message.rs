@@ -3,13 +3,13 @@
 // ! do not edit or do funny stuff with this code else entire bot will break so becareful what you do here
 // ! make sure you know what u doing
 // ! future timelessnesses
+
 use crate::{Error, Things};
 
 use crate::utils::id::generate_id;
 use chrono;
 use poise;
 use poise::serenity_prelude as poise_serenity;
-use serenity;
 
 fn column(num: i64, res: &str) -> String {
     if num > 0 {
@@ -30,7 +30,6 @@ struct WHY {
 pub async fn message(
     ctx: &poise_serenity::Context,
     _event: &poise::Event<'_>,
-    _framework: poise::FrameworkContext<'_, Things, Error>,
     things: &Things,
     message: &poise_serenity::Message,
 ) -> Result<(), Error> {
