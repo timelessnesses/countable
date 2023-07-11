@@ -66,6 +66,7 @@ class Leaderboard(commands.Cog):
             embed.add_field(
                 name=f"{self.prefix(i + 1)}. {await self.bot.fetch_guild(server['guild_id'])}",
                 value=f"{server['count_number']} chains. (Currently at character {self.column(server['count_number'])})",
+                inline=True
             )
         for i, server in enumerate(all_guilds):
             if server["guild_id"] == ctx.guild.id:
@@ -99,7 +100,8 @@ class Leaderboard(commands.Cog):
         for i, user in enumerate(users):
             embed.add_field(
                 name=f"{self.prefix(i + 1)}. {await self.bot.fetch_user(user['user_id'])}",
-                value=f"{user['alphabet_counts']} letters. (Currently have alphabet count at{user['alphabet_counts']})",
+                value=f"{user['alphabet_counts']} letters.",
+                inline=True
             )
         for i, user in enumerate(all_users):
             if user["user_id"] == ctx.author.id:
@@ -141,6 +143,7 @@ class Leaderboard(commands.Cog):
             embed.add_field(
                 name=f"{self.prefix(i + 1)}. {await self.bot.fetch_guild(server['guild_id'])}",
                 value=f"{server['longest_chain']} characters. (Currently at character {self.column(server['longest_chain'])})",
+                inline=True
             )
         for i, server in enumerate(all_guilds):
             if int(server["guild_id"]) == ctx.guild.id:
