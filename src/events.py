@@ -43,7 +43,8 @@ class events(commands.Cog):
                 message.guild.id,
             )
             previous_count = await self.bot.db.fetch(
-                "SELECT count_number FROM counting WHERE guild_id = $1", message.guild.id
+                "SELECT count_number FROM counting WHERE guild_id = $1",
+                message.guild.id,
             )
             if not previous_person:
                 return
@@ -133,9 +134,13 @@ class events(commands.Cog):
                         current_count[0]["count_number"],
                         ctx.guild.id,
                     )
-                current_highest_chain = await self.bot.db.fetch("SELECT * FROM counting")
+                current_highest_chain = await self.bot.db.fetch(
+                    "SELECT * FROM counting"
+                )
                 first_rank = sorted(
-                    current_highest_chain, key=lambda x: x["longest_chain"], reverse=True
+                    current_highest_chain,
+                    key=lambda x: x["longest_chain"],
+                    reverse=True,
                 )[0]
                 if first_rank["longest_chain"] < previous_count[0]["count_number"] + 1:
                     await ctx.send(
@@ -215,7 +220,7 @@ class events(commands.Cog):
                     0,
                     message.guild.id,
                 )
-    
+
                 current_count = await self.bot.db.fetch(
                     "SELECT * FROM counting WHERE guild_id = $1", ctx.guild.id
                 )
@@ -238,9 +243,13 @@ class events(commands.Cog):
                         previous_count[0]["count_number"] + 1,
                         ctx.guild.id,
                     )
-                current_highest_chain = await self.bot.db.fetch("SELECT * FROM counting")
+                current_highest_chain = await self.bot.db.fetch(
+                    "SELECT * FROM counting"
+                )
                 first_rank = sorted(
-                    current_highest_chain, key=lambda x: x["longest_chain"], reverse=True
+                    current_highest_chain,
+                    key=lambda x: x["longest_chain"],
+                    reverse=True,
                 )[0]
                 if first_rank["longest_chain"] < previous_count[0]["count_number"] + 1:
                     await ctx.send(
@@ -255,7 +264,7 @@ class events(commands.Cog):
                         previous_count[0]["count_number"] + 1,
                         ctx.guild.id,
                     )
-    
+
                 save_count = await self.bot.db.fetch(
                     "SELECT * FROM config WHERE guild_id = $1", ctx.guild.id
                 )
@@ -275,9 +284,10 @@ class events(commands.Cog):
             # -------------------------------------------------------
             # all condition were met so we can count
             previous_number = await self.bot.db.fetch(
-                "SELECT count_number FROM counting WHERE guild_id = $1", message.guild.id
+                "SELECT count_number FROM counting WHERE guild_id = $1",
+                message.guild.id,
             )
-    
+
             await self.bot.db.execute(
                 "UPDATE counting SET previous_person = $1, count_number = $2 WHERE guild_id = $3",
                 message.author.id,
@@ -307,7 +317,9 @@ class events(commands.Cog):
                 message.author.id,
             )
         except Exception as e:
-            await ctx.send("Something went wrong with checking process! Please consider looking at log file.")
+            await ctx.send(
+                "Something went wrong with checking process! Please consider looking at log file."
+            )
             raise e
 
 
