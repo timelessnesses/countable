@@ -15,8 +15,8 @@ class Stuff(
     Miscellaneous commands and stuffs that don't fit anywhere else.
     """
 
-    snaky = None
-    timelessnesses = None
+    snaky: discord.User = None
+    timelessnesses: discord.User = None
 
     def __init__(self, bot):
         self.bot = bot
@@ -41,7 +41,7 @@ class Stuff(
 
         embed.add_field(
             name="Creator",
-            value=f"{str(self.timelessnesses)} ({self.timelessnesses.mention})",
+            value=f"@{str(self.timelessnesses)} ({self.timelessnesses.mention})",
         )
         embed.add_field(
             name="Contributors",
