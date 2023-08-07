@@ -32,7 +32,7 @@ class Stuff(
         )
 
         embed.add_field(name="Creator",value="@" + str(await self.bot.fetch_user(890913140278181909)))
-        embed.add_field(name="Contributors", value=f"@{str(await self.bot.fetch_user(737103938192408637)} for idea")
+        embed.add_field(name="Contributors", value=f"@{str(await self.bot.fetch_user(737103938192408637))} for idea")
         embed.add_field(
             name="The bot is also open-source!",
             value="https://github.com/timelessnesses/alphabet-count-bot",
