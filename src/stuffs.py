@@ -15,8 +15,17 @@ class Stuff(
     Miscellaneous commands and stuffs that don't fit anywhere else.
     """
 
+    snaky = None
+    timelessnesses = None
+    
+
     def __init__(self, bot):
         self.bot = bot
+        
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.snaky = await self.bot.fetch_user(737103938192408637)
+        
 
     @property
     def display_emoji(self):
@@ -31,14 +40,8 @@ class Stuff(
             title="Credits", description="Thanks to everyone who using this bot!"
         )
 
-        embed.add_field(
-            name="Creator",
-            value="@" + str(await self.bot.fetch_user(890913140278181909)),
-        )
-        embed.add_field(
-            name="Contributors",
-            value=f"@{str(await self.bot.fetch_user(737103938192408637))} for idea",
-        )
+        embed.add_field(name="Creator", value=f"{str(self.timelessnesses)} ({self.timelessnesses.mention})")
+        embed.add_field(name="Contributors", value=f"@{str(self.snaky)} ({self.snaky.mention}) for idea")
         embed.add_field(
             name="The bot is also open-source!",
             value="https://github.com/timelessnesses/alphabet-count-bot",
