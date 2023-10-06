@@ -5,7 +5,7 @@ RUN apk update && apk add postgresql python3-dev make gcc g++ build-base linux-h
 RUN python3 -m ensurepip
 RUN python3 -m pip install poetry
 RUN poetry install
-ENV ALPHABET_DB_HOST=127.0.0.1
+ENV ALPHABET_DB_HOST=postgres
 ENV ALPHABET_DB_PORT=5432
 ENV ALPHABET_DB_USER=postgres
 ENV ALPHABET_DB_PASSWORD=postgres
