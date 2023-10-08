@@ -1,15 +1,8 @@
-FROM alpine
+FROM python:3.10-alpine
 WORKDIR /bot
 COPY . .
-RUN apk update && apk add python3-dev make gcc g++ build-base linux-headers
-RUN python3 -m ensurepip
-RUN python3 -m pip install poetry
-RUN poetry install
-ENV ALPHABET_DB_HOST=postgres
-ENV ALPHABET_DB_PORT=5432
-ENV ALPHABET_DB_USER=postgres
-ENV ALPHABET_DB_PASSWORD=postgres
-ENV ALPHABET_DB_NAME=postgres
+RUN apk update && apk add make gcc g++ build-base linux-headers git && python3 -m ensurepip && python3 -m pip install poetry && poetry install -vvv && apk del gcc g++ build-base linux-headers
 ENV JISHAKU_HIDE=1
-ENV ALPHABET_TOKEN=none
+ENV I_AM_CONTAINERIZED=YES
+ARG REVISION
 CMD make

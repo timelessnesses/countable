@@ -83,6 +83,9 @@ def get_git_revision_short_hash() -> str:
 
 
 def get_version():
+    if os.getenv("I_AM_CONTAINERIZED","NO").upper() == "YES":
+        bot.version_ = f"I am running inside a container! (Revision: {os.getenv('REVISION')})"
+        return
     is_updated = subprocess.check_output("git status -uno", shell=True).decode("ascii")
 
     if "modified" in is_updated:
