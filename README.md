@@ -78,8 +78,7 @@ Create new file called `compose.yaml` with these contents inside:
 ```yaml
 services:
     countable:
-        build:
-            image: ghcr.io/timelessnesses/countable
+        image: ghcr.io/timelessnesses/countable
         environment:
             - ALPHABET_DB_HOST=db
             - ALPHABET_DB_PORT=5432
