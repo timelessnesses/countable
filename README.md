@@ -92,6 +92,10 @@ services:
             - POSTGRES_USER=countable
             - POSTGRES_PASSWORD=countable
             - POSTGRES_DB=countables
+        volumes:
+            - data:/var/lib/postgresql/data
+volumes:
+    data:
 ```
 
 Then start it up with `docker compose up` (add `-d` for running it in the background)
