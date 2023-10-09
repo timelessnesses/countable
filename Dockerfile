@@ -1,8 +1,17 @@
-FROM python:3.10-alpine
+FROM python:3.10-alpine as base
+RUN python3 -m pip install poetry
+RUN python3 -m poetry config virtualenvs.in-project true
+FROM base as build
 WORKDIR /bot
 COPY . .
-RUN apk update && apk add make gcc g++ build-base linux-headers git && python3 -m ensurepip && python3 -m pip install poetry && poetry install -vvv && apk del gcc g++ build-base linux-headers
+RUN apk update 
+RUN apk add --no-cache make gcc linux-headers build-base 
+RUN python3 -m poetry install
+RUN apk del gcc linux-headers build-base
+FROM python:3.10-alpine as run
+WORKDIR /bot
+COPY --from=build /bot .
 ENV JISHAKU_HIDE=1
 ENV I_AM_CONTAINERIZED=YES
 ARG REVISION
-CMD make
+CMD ["/bot/.venv/bin/python", "bot.py"]
