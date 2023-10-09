@@ -1,0 +1,24 @@
+services:
+    countable:
+        build:
+            context: .
+            args:
+                - REVISION=${COUNTABLE_REVISION}
+        env_file:
+            - ./.env
+        environment:
+            - ALPHABET_DB_HOST=db
+            - ALPHABET_DB_PORT=5432
+            - ALPHABET_DB_USER=countable
+            - ALPHABET_DB_PASSWORD=countable
+            - ALPHABET_DB_NAME=countables
+    db:
+        image: postgres:14
+        environment:
+            - POSTGRES_USER=countable
+            - POSTGRES_PASSWORD=countable
+            - POSTGRES_DB=countables
+        volumes:
+            - data:/var/lib/postgresql/data
+volumes:
+    data:
