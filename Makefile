@@ -30,5 +30,9 @@ compose_build:
 publish_image:
 	COUNTABLE_REVISION=$(shell git rev-parse --short main) docker build . --tag ghcr.io/timelessnesses/countable:latest --tag ghcr.io/timelessnesses/countable:$(shell git rev-parse --short main) --tag ghcr.io/timelessnesses/countable:main
 	docker push ghcr.io/timelessnesses/countable:latest
+	docker push ghcr.io/timelessnesses/countable:main
 	docker push ghcr.io/timelessnesses/countable:$(shell git rev-parse --short main)
-	docker push ghct.io/timelessnesses/countable:main
+publish_no_builds:
+	docker push ghcr.io/timelessnesses/countable:latest
+	docker push ghcr.io/timelessnesses/countable:main
+	docker push ghcr.io/timelessnesses/countable:$(shell git rev-parse --short main)
