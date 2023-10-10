@@ -22,13 +22,13 @@ beauty: # this is mostly used in CI so just use global python
 install-beautifier:
 	pip install isort black flake8 autoflake
 build_image:
-	COUNTABLE_REVISION=$(shell git rev-parse --short main) docker build . --tag countable:latest
+	docker build . --tag countable:latest --build-arg="REVISION=$(shell git rev-parse --short main)"
 compose_run:
 	COUNTABLE_REVISION=$(shell git rev-parse --short main) docker compose up
 compose_build:
 	COUNTABLE_REVISION=$(shell git rev-parse --short main) docker compose build --no-cache
 publish_image:
-	COUNTABLE_REVISION=$(shell git rev-parse --short main) docker build . --tag ghcr.io/timelessnesses/countable:latest --tag ghcr.io/timelessnesses/countable:$(shell git rev-parse --short main) --tag ghcr.io/timelessnesses/countable:main
+	docker build . --build-arg="REVISION=$(shell git rev-parse --short main)" --tag ghcr.io/timelessnesses/countable:latest --tag ghcr.io/timelessnesses/countable:$(shell git rev-parse --short main) --tag ghcr.io/timelessnesses/countable:main
 	docker push ghcr.io/timelessnesses/countable:latest
 	docker push ghcr.io/timelessnesses/countable:main
 	docker push ghcr.io/timelessnesses/countable:$(shell git rev-parse --short main)
