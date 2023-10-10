@@ -14,4 +14,6 @@ COPY --from=build /bot .
 ENV JISHAKU_HIDE=1
 ENV I_AM_CONTAINERIZED=YES
 ARG REVISION
+ENV REVISION=$REVISION
+RUN echo "Currently Building with commit: $REVISION"
 CMD ["/bot/.venv/bin/python", "bot.py"]
