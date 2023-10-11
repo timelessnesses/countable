@@ -116,11 +116,13 @@ Create `.env` with these contents inside:
 ALPHABET_TOKEN=<TOKEN>
 ```
 
-Then run `docker compose up` (add `-d` for running it in the background
+Then run `make compose_run`
 
 ### Cloned from GitHub Repository (Image)
 
-Run `docker build . --tag countable_dev:latest` then run
+You need `make` for this to work.  
+
+Run `make build_image` then run
 
 ```sh
 docker run countable_dev:latest -e ALPHABET_DB_HOST=<Database's hostname> -e ALPHABET_DB_PORT=<Database's server port> -e ALPHABET_DB_USER=<User account for accessing database's server> -e ALPHABET_DB_PASSWORD=<A password for user account> -e ALPHABET_DB_NAME=<Database name> -e ALPHABET_TOKEN=<Discord bot token>
