@@ -4,7 +4,7 @@ A alphabet count bot inspired by Counting
 
 ## How this works
 
-You continue saying alphabet in order like
+You continue saying alphabet in order like this
 
 ```text
 a
@@ -13,7 +13,7 @@ b
 z
 ```
 
-But when it reached ended sequel however you add a character to it like you counting a number like this
+But when it reached ended sequel, you add a character to it like you counting a number like this
 
 ```text
 aa
