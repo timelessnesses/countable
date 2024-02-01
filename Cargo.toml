@@ -3,10 +3,6 @@ name = "countable"
 version = "0.1.0"
 edition = "2021"
 
-[registries.crates-io]
-protocol = "sparse" # h
-# why sparse doesn't work ;w;
-
 [build]
 build = "./src/build.rs"
 
@@ -20,9 +16,9 @@ fern = {version="0.6.2", features=[
 lazy_static = "1.4.0"
 log = "0.4.17"
 parking_lot = "0.12.1"
-poise = "0.5.2"
+poise = "0.6.1"
 rand = "0.8.5"
-serenity = {version="0.11.5", features=[
+serenity = {version="0.12.0", features=[
     "cache",
     "builder",
     "chrono",
@@ -34,7 +30,7 @@ serenity = {version="0.11.5", features=[
     "standard_framework",
     "utils",
 ]}
-sysinfo = "0.28.4"
+sysinfo = "0.30.5"
 tokio = {version="1.26.0", features=["full"]}
 tokio-postgres = {version="0.7.7", features=["with-chrono-0_4"]}
-toml = "0.7.3"
+toml = "0.8.9"

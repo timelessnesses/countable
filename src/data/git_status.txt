@@ -2,19 +2,21 @@ On branch rust
 Your branch is up to date with 'origin/rust'.
 
 Changes not staged for commit:
-  (use "git add/rm <file>..." to update what will be committed)
+  (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
 	modified:   Cargo.lock
 	modified:   Cargo.toml
-	deleted:    src/commands/stuffs/last_x_commit.rs
-	modified:   src/commands/stuffs/mod.rs
+	modified:   src/commands/setup.rs
+	modified:   src/commands/stuffs/ping.rs
 	modified:   src/commands/stuffs/status.rs
+	modified:   src/data/cargo_ver.txt
+	modified:   src/data/current_commit_id.txt
+	modified:   src/data/git_status.txt
+	modified:   src/data/last_x_commit_history.txt
+	modified:   src/data/rustc_ver.txt
 	modified:   src/events/mod.rs
 	modified:   src/events/on_message.rs
+	modified:   src/events/on_ready.rs
 	modified:   src/main.rs
-	modified:   src/utils/github.rs
-	modified:   src/utils/mod.rs
-	modified:   src/utils/revision.rs
-	modified:   src/utils/versions.rs
 
 no changes added to commit (use "git add" and/or "git commit -a")

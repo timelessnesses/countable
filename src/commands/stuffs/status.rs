@@ -7,7 +7,7 @@ use crate::utils::versions::{
 use crate::{Context, Error};
 use poise;
 use poise::serenity_prelude as poise_serenity;
-use sysinfo::{self, CpuExt, DiskExt, SystemExt};
+use sysinfo::{self, Disks};
 
 #[allow(unused_assignments)]
 #[poise::command(prefix_command, slash_command)]
@@ -17,7 +17,8 @@ pub async fn status(ctx: Context<'_>) -> Result<(), Error> {
     sys.refresh_all();
     let cpu_percentage = sys.global_cpu_info().cpu_usage() as f32 / sys.cpus().len() as f32;
     let ram_percentage = sys.available_memory() as f32 / sys.total_memory() as f32;
-    let disk_percentage = sys.disks()[0].available_space() / sys.disks()[0].total_space();
+    let d = Disks::new_with_refreshed_list();
+    let disk_percentage = d[0].available_space() / d[0].total_space();
     let data = ctx.data();
     let up_when = data.up_when;
     let up_for = chrono::Local::now() - up_when;
@@ -43,26 +44,23 @@ pub async fn status(ctx: Context<'_>) -> Result<(), Error> {
     if text.is_empty() {
         text = "Unknown Error! (Should not be possible)".to_string();
     }
-    ctx.send(|r| {
-        r.embed(|e| {
-            return e
-                .title("Status")
-                .description("Here's some information about the bot.")
-                .color(poise_serenity::Color::DARK_GREEN)
-                .field("CPU", format!("{}%", cpu_percentage), true)
-                .field("RAM", format!("{}%", ram_percentage), true)
-                .field("Disk", format!("{}%", disk_percentage), true)
-                .field("Uptime", format_duration(up_for), true)
-                .field("Rust Compiler Version", get_rust_compiler_version(), true)
-                .field("Cargo Version", get_cargo_version(), true)
-                .field("Serenity Version", get_serenity_version(), true)
-                .field("Poise Version", get_poise_version(), true)
-                .field("Bot Revision", text, true)
-                .field("Bot Version", env!("CARGO_PKG_VERSION"), true)
-                .field("Last 5 Commits", get_last_5_history_commits(), true)
-                .timestamp(chrono::prelude::Local::now());
-        })
-    })
+    let embed = poise_serenity::CreateEmbed::new()
+        .title("Status")
+        .description("Here's some information about the bot.")
+        .color(poise_serenity::Color::DARK_GREEN)
+        .field("CPU", format!("{}%", cpu_percentage), true)
+        .field("RAM", format!("{}%", ram_percentage), true)
+        .field("Disk", format!("{}%", disk_percentage), true)
+        .field("Uptime", format_duration(up_for), true)
+        .field("Rust Compiler Version", get_rust_compiler_version(), true)
+        .field("Cargo Version", get_cargo_version(), true)
+        .field("Serenity Version", get_serenity_version(), true)
+        .field("Poise Version", get_poise_version(), true)
+        .field("Bot Revision", text, true)
+        .field("Bot Version", env!("CARGO_PKG_VERSION"), true)
+        .field("Last 5 Commits", get_last_5_history_commits(), true)
+        .timestamp(chrono::prelude::Local::now());
+    ctx.send(poise::CreateReply::default().embed(embed))
     .await
     .unwrap();
 

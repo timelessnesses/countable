@@ -6,7 +6,7 @@ use poise::serenity_prelude as poise_serenity;
 
 pub async fn ready(
     _ctx: &poise_serenity::Context,
-    _event: &poise::Event<'_>,
+    _event: &poise_serenity::FullEvent,
     _framework: poise::FrameworkContext<'_, Things, Error>,
     _things: &Things,
 ) -> Result<(), Error> {

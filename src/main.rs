@@ -1,12 +1,12 @@
-#![allow(stable_features)]
-#![deny(
-    rust_2018_idioms,
-    missing_copy_implementations,
-    noop_method_call,
-    unused
-)]
-#![warn(clippy::pedantic)]
-#![allow(unused_assignments)]
+// #![allow(stable_features)]
+// #![deny(
+//     rust_2018_idioms,
+//     missing_copy_implementations,
+//     noop_method_call,
+//     unused
+// )]
+// #![warn(clippy::pedantic)]
+// #![allow(unused_assignments)]
 
 // rewrite of countable using poise
 
@@ -32,7 +32,7 @@ pub struct Things {
 pub type Error = Box<dyn std::error::Error + Send + Sync>;
 pub type Context<'a> = poise::Context<'a, Things, Error>;
 
-impl poise_serenity::TypeMapKey for Things {
+impl serenity::prelude::TypeMapKey for Things {
     type Value = std::sync::Arc<Things>;
 }
 
@@ -119,10 +119,6 @@ async fn main() {
             },
             ..Default::default()
         })
-        .token(std::env::var("COUNTABLE_DISCORD_TOKEN").expect(
-            "COUNTABLE_DISCORD_TOKEN not set neither in enviroment variables nor in .env file",
-        ))
-        .intents(poise_serenity::GatewayIntents::all())
         .setup(|ctx, _ready, framework| {
             Box::pin(async move {
                 poise::builtins::register_globally(ctx, &framework.options().commands)
@@ -135,10 +131,14 @@ async fn main() {
             })
         }) // it works now?????
         .initialize_owners(true)
-        .client_settings(|c| {
-            c.framework(serenity::framework::StandardFramework::new().configure(|c| c.prefix("c!")))
-        });
+        .build();
     log::info!("Initialized bot");
-    bot.run_autosharded().await.unwrap();
+    let client = poise_serenity::ClientBuilder::new(
+        std::env::var("COUNTABLE_DISCORD_TOKEN").expect(
+            "COUNTABLE_DISCORD_TOKEN not set neither in enviroment variables nor in .env file",
+        ),
+        poise_serenity::GatewayIntents::all()
+    ).framework(bot).await.unwrap();
+    client.start_autosharded().await.unwrap();
     log::info!("Bot stopped");
 }

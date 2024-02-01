@@ -29,7 +29,7 @@ struct WHY {
 
 pub async fn message(
     ctx: &poise_serenity::Context,
-    _event: &poise::Event<'_>,
+    _event: &poise_serenity::FullEvent,
     things: &Things,
     message: &poise_serenity::Message,
 ) -> Result<(), Error> {
@@ -43,9 +43,9 @@ pub async fn message(
     let guild = message.guild(&ctx.cache).unwrap();
     let db = things.database.as_ref();
 
-    let guild_id = guild.id.as_u64().to_owned() as i64;
-    let channel_id = message.channel_id.as_u64().to_owned() as i64;
-    let author_id = message.author.id.as_u64().to_owned() as i64;
+    let guild_id = guild.id.get() as i64;
+    let channel_id = message.channel_id.get() as i64;
+    let author_id = message.author.id.get() as i64;
 
     let m = db
         .query(
@@ -122,20 +122,18 @@ pub async fn message(
             .unwrap();
         let id = generate_id(8);
         let now = chrono::Local::now();
+        let embed = poise_serenity::builder::CreateEmbed::new()
+            .title("You cannot say alphabet twice in a row! Give this chance to other!")
+            .description("You said last and next alphabet. Now the server alphabet is now reset to A.")
+            .color(0xff0000)
+            .field("Reason", "You can't say last and next alphabet in a row", false)
+            .field("Ruined By", message.author.tag(), false)
+            .field("Time", now.to_string(), false)
+            .field("Fix", "This server did not enabled is_same_person feature, please try not to say it yourself after you said it and wait for other to say it!", false)
+            .field("Jump URL", message.link(), false);
         message
             .channel_id
-            .send_message(ctx, |m| {
-                return m.embed(|e| {
-                    return e.title("You cannot say alphabet twice in a row! Give this chance to other!")
-                    .description("You said last and next alphabet. Now the server alphabet is now reset to A.")
-                    .color(0xff0000)
-                    .field("Reason", "You can't say last and next alphabet in a row", false)
-                    .field("Ruined By", message.author.tag(), false)
-                    .field("Time", now, false)
-                    .field("Fix", "This server did not enabled is_same_person feature, please try not to say it yourself after you said it and wait for other to say it!", false)
-                    .field("Jump URL", message.link(), false)
-                });
-            })
+            .send_message(ctx, poise_serenity::builder::CreateMessage::new().embed(embed))
             .await
             .unwrap();
         let ruined_counts = db
@@ -183,19 +181,16 @@ pub async fn message(
             .unwrap();
         let id = generate_id(8);
         let now = chrono::Local::now();
-        message.channel_id.send_message(ctx, |m| {
-            return m.embed(|e| {
-                return e.title("You ruined counting due to wrong alphabet order!")
-                .description(format!("You said {} but the server expected {}.", message.content.to_ascii_lowercase(), expectation))
-                .color(0xff0000)
-                .field("Reason", "You said wrong alphabet order", false)
-                .field("Ruined By", message.author.tag(), false)
-                .field("Time", now, false)
-                .field("Fix", format!("You can't say wrong alphabet order, please try to say the next alphabet ({})!", expectation), false)
-                .field("Jump URL", message.link(), false)
-
-            });
-        }).await.unwrap();
+        let embed = poise_serenity::builder::CreateEmbed::new()
+        .title("You ruined counting due to wrong alphabet order!")
+        .description(format!("You said {} but the server expected {}.", message.content.to_ascii_lowercase(), expectation))
+        .color(0xff0000)
+        .field("Reason", "You said wrong alphabet order", false)
+        .field("Ruined By", message.author.tag(), false)
+        .field("Time", now.to_string(), false)
+        .field("Fix", format!("You can't say wrong alphabet order, please try to say the next alphabet ({})!", expectation), false)
+        .field("Jump URL", message.link(), false);
+        message.channel_id.send_message(ctx, poise_serenity::CreateMessage::new().embed(embed)).await.unwrap();
         let ruined_counts = db
             .query(
                 "SELECT ruined_counts FROM user_stats WHERE user_id = $1",
@@ -281,22 +276,19 @@ async fn check_longest_chain(
     if (previous_count[0].get::<usize, i64>(0) + 1 > current_count[0].get::<usize, i64>(1))
         && previous_count[0].get::<usize, i64>(0) != 0
     {
+        let embed = poise_serenity::CreateEmbed::new()
+            .title("This server just broke it's personal longest streak!")
+            .description(format!(
+                "The longest streak was {} ({}) and now it is {} ({})!",
+                current_count[0].get::<usize, i64>(1),
+                column(current_count[0].get::<usize, i64>(1), ""),
+                current_count[0].get::<usize, i64>(0),
+                column(current_count[0].get::<usize, i64>(0), "")
+            ))
+            .color(poise_serenity::Color::DARK_GREEN);
         message
             .channel_id
-            .send_message(ctx, |m| {
-                return m.embed(|e| {
-                    return e
-                        .title("This server just broke it's personal longest streak!")
-                        .description(format!(
-                            "The longest streak was {} ({}) and now it is {} ({})!",
-                            current_count[0].get::<usize, i64>(1),
-                            column(current_count[0].get::<usize, i64>(1), ""),
-                            current_count[0].get::<usize, i64>(0),
-                            column(current_count[0].get::<usize, i64>(0), "")
-                        ))
-                        .color(poise_serenity::Color::DARK_GREEN);
-                });
-            })
+            .send_message(ctx, poise_serenity::CreateMessage::new().embed(embed))
             .await
             .unwrap();
         db.execute(
@@ -320,24 +312,21 @@ async fn check_longest_chain(
         let guild = message.guild_id.unwrap();
         let guild_name = guild.name(ctx).unwrap();
         let guild_icon = guild.get_preview(ctx).await.unwrap().icon.unwrap();
+        let embed = poise_serenity::CreateEmbed::new()
+            .title("This server just broke the global longest streak!")
+            .description(format!(
+                "The longest streak was {} ({}) and now it is {} ({})!",
+                current_count[0].get::<usize, i64>(1),
+                column(current_count[0].get::<usize, i64>(1), ""),
+                current_count[0].get::<usize, i64>(0),
+                column(current_count[0].get::<usize, i64>(0), "")
+            ))
+            .color(poise_serenity::Color::DARK_GREEN)
+            .thumbnail(guild_icon.to_string())
+            .field("Server", guild_name, false);
         message
             .channel_id
-            .send_message(ctx, |m| {
-                return m.embed(|e| {
-                    return e
-                        .title("This server just broke the global longest streak!")
-                        .description(format!(
-                            "The longest streak was {} ({}) and now it is {} ({})!",
-                            current_count[0].get::<usize, i64>(1),
-                            column(current_count[0].get::<usize, i64>(1), ""),
-                            current_count[0].get::<usize, i64>(0),
-                            column(current_count[0].get::<usize, i64>(0), "")
-                        ))
-                        .color(poise_serenity::Color::DARK_GREEN)
-                        .thumbnail(guild_icon)
-                        .field("Server", guild_name, false);
-                });
-            })
+            .send_message(ctx, poise_serenity::CreateMessage::new().embed(embed))
             .await
             .unwrap();
     }

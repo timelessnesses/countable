@@ -6,15 +6,15 @@ use poise::serenity_prelude as poise_serenity;
 
 pub async fn listener(
     ctx: &poise_serenity::Context,
-    event: &poise::Event<'_>,
+    event: &poise_serenity::FullEvent,
     framework: poise::FrameworkContext<'_, Things, Error>,
     things: &Things,
 ) -> Result<(), Error> {
     match event {
-        poise::Event::Message { new_message } => {
+        poise_serenity::FullEvent::Message { new_message } => {
             on_message::message(ctx, event, things, new_message).await?;
         }
-        poise::Event::Ready { .. } => {
+        poise_serenity::FullEvent::Ready { .. } => {
             on_ready::ready(ctx, event, framework, things).await?;
         }
         _ => {}
