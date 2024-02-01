@@ -13,9 +13,9 @@ pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
     if j.is_none() || ping.is_none() {
         let embed = poise_serenity::CreateEmbed::new()
         .title("Failed to fetch shard!").description("Something is wrong at the bot's end. Please consider send this error to GitHub repository issue!").color(poise_serenity::Color::RED).timestamp(chrono::prelude::Local::now());
-        ctx.send(
-            poise::CreateReply::default().embed(embed)
-        ).await.unwrap();
+        ctx.send(poise::CreateReply::default().embed(embed))
+            .await
+            .unwrap();
         return Err(("Failed to fetch shard!").into());
     }
     let embed = poise_serenity::CreateEmbed::new()
@@ -28,7 +28,7 @@ pub async fn ping(ctx: Context<'_>) -> Result<(), Error> {
         .color(poise_serenity::Color::DARK_GREEN)
         .timestamp(chrono::prelude::Local::now());
     ctx.send(poise::CreateReply::default().embed(embed))
-    .await
-    .unwrap();
+        .await
+        .unwrap();
     return Ok(());
 }

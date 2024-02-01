@@ -137,8 +137,11 @@ async fn main() {
         std::env::var("COUNTABLE_DISCORD_TOKEN").expect(
             "COUNTABLE_DISCORD_TOKEN not set neither in enviroment variables nor in .env file",
         ),
-        poise_serenity::GatewayIntents::all()
-    ).framework(bot).await.unwrap();
+        poise_serenity::GatewayIntents::all(),
+    )
+    .framework(bot)
+    .await
+    .unwrap();
     client.start_autosharded().await.unwrap();
     log::info!("Bot stopped");
 }

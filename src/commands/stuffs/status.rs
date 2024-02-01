@@ -61,8 +61,8 @@ pub async fn status(ctx: Context<'_>) -> Result<(), Error> {
         .field("Last 5 Commits", get_last_5_history_commits(), true)
         .timestamp(chrono::prelude::Local::now());
     ctx.send(poise::CreateReply::default().embed(embed))
-    .await
-    .unwrap();
+        .await
+        .unwrap();
 
     return Ok(());
 }

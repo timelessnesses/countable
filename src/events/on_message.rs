@@ -133,7 +133,10 @@ pub async fn message(
             .field("Jump URL", message.link(), false);
         message
             .channel_id
-            .send_message(ctx, poise_serenity::builder::CreateMessage::new().embed(embed))
+            .send_message(
+                ctx,
+                poise_serenity::builder::CreateMessage::new().embed(embed),
+            )
             .await
             .unwrap();
         let ruined_counts = db
@@ -182,15 +185,30 @@ pub async fn message(
         let id = generate_id(8);
         let now = chrono::Local::now();
         let embed = poise_serenity::builder::CreateEmbed::new()
-        .title("You ruined counting due to wrong alphabet order!")
-        .description(format!("You said {} but the server expected {}.", message.content.to_ascii_lowercase(), expectation))
-        .color(0xff0000)
-        .field("Reason", "You said wrong alphabet order", false)
-        .field("Ruined By", message.author.tag(), false)
-        .field("Time", now.to_string(), false)
-        .field("Fix", format!("You can't say wrong alphabet order, please try to say the next alphabet ({})!", expectation), false)
-        .field("Jump URL", message.link(), false);
-        message.channel_id.send_message(ctx, poise_serenity::CreateMessage::new().embed(embed)).await.unwrap();
+            .title("You ruined counting due to wrong alphabet order!")
+            .description(format!(
+                "You said {} but the server expected {}.",
+                message.content.to_ascii_lowercase(),
+                expectation
+            ))
+            .color(0xff0000)
+            .field("Reason", "You said wrong alphabet order", false)
+            .field("Ruined By", message.author.tag(), false)
+            .field("Time", now.to_string(), false)
+            .field(
+                "Fix",
+                format!(
+                    "You can't say wrong alphabet order, please try to say the next alphabet ({})!",
+                    expectation
+                ),
+                false,
+            )
+            .field("Jump URL", message.link(), false);
+        message
+            .channel_id
+            .send_message(ctx, poise_serenity::CreateMessage::new().embed(embed))
+            .await
+            .unwrap();
         let ruined_counts = db
             .query(
                 "SELECT ruined_counts FROM user_stats WHERE user_id = $1",
