@@ -11,7 +11,7 @@ use chrono;
 use poise;
 use poise::serenity_prelude as poise_serenity;
 
-fn column(num: i64, res: &str) -> String {
+pub fn column(num: i64, res: &str) -> String {
     if num > 0 {
         let c = ((num - 1) % 26) as usize;
         let mut res_new = String::with_capacity(res.len() + 1);
@@ -40,10 +40,10 @@ pub async fn message(
     if message.is_private() {
         return Ok(());
     }
-    let guild = message.guild(&ctx.cache).unwrap();
+    let guild = message.guild_id.unwrap();
     let db = things.database.as_ref();
 
-    let guild_id = guild.id.get() as i64;
+    let guild_id = guild.get() as i64;
     let channel_id = message.channel_id.get() as i64;
     let author_id = message.author.id.get() as i64;
 

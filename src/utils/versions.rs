@@ -6,7 +6,7 @@ const RUSTC_VERSION: &str = include_str!("../data/rustc_ver.txt");
 const CARGO_VER: &str = include_str!("../data/cargo_ver.txt");
 
 pub fn get_rust_compiler_version() -> String {
-    return RUSTC_VERSION.to_owned();
+    return RUSTC_VERSION.to_owned().replace("\n", "to");
 }
 
 pub fn get_cargo_version() -> String {

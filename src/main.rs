@@ -76,7 +76,7 @@ async fn connect_to_db() -> Result<tokio_postgres::Client, ()> {
                 log::warn!("COUNTABLE_POSTGRES_DB_PORT not set, using 5432");
                 return "5432".to_string();
             }),
-            std::env::var("COUNTABLE_POSTGRES_DB_USER").expect("COUNTABLE_POSTGRES_DB_USER not set"),
+            std::env::var("COUNTABLE_POSTGRES_DB_USER").expect("COUNTABLE_POSTGRES_DB_USER not set neither in enviroment variables nor in .env file"),
             std::env::var("COUNTABLE_POSTGRES_DB_PASSWORD").unwrap_or_else(|_| {
                 log::warn!("COUNTABLE_POSTGRES_DB_PASSWORD not set, using empty password");
                 return "".to_string();
@@ -94,7 +94,7 @@ async fn connect_to_db() -> Result<tokio_postgres::Client, ()> {
         conn.await.expect("Database connection lost");
     });
 
-    db.execute(schema, &[]).await.unwrap();
+    db.batch_execute(schema).await.unwrap();
 
     return Ok(db);
 }
@@ -102,7 +102,10 @@ async fn connect_to_db() -> Result<tokio_postgres::Client, ()> {
 #[tokio::main]
 async fn main() {
     setup_logging();
-    log::info!("{}", std::env::var("RUSTC_VERSION").unwrap()); // damn
+    log::info!(
+        "Built with {}",
+        crate::utils::versions::get_rust_compiler_version()
+    ); // damn
     log::info!("Initialized Logger");
     let db = connect_to_db().await.unwrap();
     log::info!("Connected to database");
@@ -133,7 +136,7 @@ async fn main() {
         .initialize_owners(true)
         .build();
     log::info!("Initialized bot");
-    let client = poise_serenity::ClientBuilder::new(
+    let mut client = poise_serenity::ClientBuilder::new(
         std::env::var("COUNTABLE_DISCORD_TOKEN").expect(
             "COUNTABLE_DISCORD_TOKEN not set neither in enviroment variables nor in .env file",
         ),

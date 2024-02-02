@@ -1,6 +1,7 @@
 mod on_message;
 mod on_ready;
 use crate::{Error, Things};
+pub use on_message::column;
 use poise;
 use poise::serenity_prelude as poise_serenity;
 
