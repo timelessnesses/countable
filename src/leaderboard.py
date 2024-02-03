@@ -44,6 +44,7 @@ class Leaderboard(commands.Cog):
         """
         Get every server's alphabet chain count that wasn't ruined ranked by most to the least in top 10!
         """
+        await ctx.defer()
         servers = sorted(
             await self.bot.db.fetch("SELECT * FROM counting"),
             key=lambda x: x["count_number"],
@@ -86,6 +87,7 @@ class Leaderboard(commands.Cog):
         """
         Get letters count by alphabet ranked by most to the least in top 10!
         """
+        await ctx.defer()
         users = sorted(
             await self.bot.db.fetch("SELECT * FROM user_stats"),
             key=lambda x: x["alphabet_counts"],
@@ -121,6 +123,7 @@ class Leaderboard(commands.Cog):
         """
         Get every server's alphabet chain count that's ruined ranked by most to the least in top 10!
         """
+        await ctx.defer()
         servers = sorted(
             await self.bot.db.fetch("SELECT * FROM counting"),
             key=lambda x: x["longest_chain"],
