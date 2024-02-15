@@ -1,10 +1,11 @@
 try:
-    import uvloop
+    import uvloop # type: ignore
 
     uvloop.install()
 except (ImportError, ModuleNotFoundError):
     pass
 
+import asyncpg
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -21,7 +22,7 @@ import subprocess
 import traceback
 
 from server import start
-from sql.sql import EasySQL
+# from sql.sql import EasySQL
 
 formatting = logging.Formatter("[%(asctime)s] - [%(levelname)s] [%(name)s] %(message)s")
 
@@ -46,7 +47,14 @@ log.addHandler(f)
 
 logging.getLogger("discord").setLevel(logging.WARNING)  # mute
 
-bot = commands.AutoShardedBot(
+class IHatePylanceComplainsPleaseShutUp(commands.AutoShardedBot):
+    log: logging.Logger
+    version_: str
+    db: asyncpg.Pool
+    start_time: datetime.datetime
+    
+
+bot = IHatePylanceComplainsPleaseShutUp(
     command_prefix="a!",
     intents=discord.Intents.all(),
     owner_ids=[467718535897022479, 890913140278181909],
@@ -123,11 +131,13 @@ else:
 ssl_object = ssl.create_default_context()
 ssl_object.check_hostname = False
 ssl_object.verify_mode = ssl.CERT_NONE
-args["ssl"] = ssl_object
+args["ssl"] = ssl_object # type: ignore
 
 
 @bot.event
 async def on_ready():
+    if bot.user == None:
+        return
     log.info("Logged in as")
     log.info(bot.user.name)
     log.info(bot.user.id)
@@ -141,20 +151,14 @@ async def main():
         started = False
         while not started:
             async with bot:
-                for extension in os.listdir("src"):
-                    if extension.endswith(".py") and not extension.startswith("_"):
-                        await bot.load_extension(f"src.{extension[:-3]}")
-                        log.info(f"Loaded extension {extension[:-3]}")
-                await bot.load_extension("jishaku")
-                log.info("Loaded jishaku")
                 try:
-                    bot.db = await EasySQL().connect(**args)
+                    bot.db = await asyncpg.create_pool(**args) # type: ignore
                 except ConnectionError:
                     log.fatal("Failed to connect to database")
                     log.info("Trying to remove SSL context")
-                    args["ssl"] = None
+                    args["ssl"] = None # type: ignore
                     try:
-                        bot.db = await EasySQL().connect(**args)
+                        bot.db = await asyncpg.create_pool(**args) # type: ignore
                     except ConnectionError:
                         log.exception("Failed to connect to database")
                         log.fatal("Exiting...")
@@ -163,6 +167,12 @@ async def main():
                 log.info("Connected to database")
                 await bot.db.execute(open("sql/starter.sql", "r").read())
                 log.info("Executed starter sql")
+                for extension in os.listdir("src"):
+                    if extension.endswith(".py") and not extension.startswith("_"):
+                        await bot.load_extension(f"src.{extension[:-3]}")
+                        log.info(f"Loaded extension {extension[:-3]}")
+                await bot.load_extension("jishaku")
+                log.info("Loaded jishaku")
                 observer.start()
                 log.info("Started file watcher")
                 bot.start_time = datetime.datetime.utcnow()
