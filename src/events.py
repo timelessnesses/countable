@@ -1,14 +1,15 @@
 import datetime
+import typing
 
+import asyncpg
 import discord
 from discord.ext import commands
-import asyncpg
 
 from .utils import stuffs
-import typing
 
 if typing.TYPE_CHECKING:
     from ..bot import IHatePylanceComplainsPleaseShutUp
+
 
 class events(commands.Cog):
     def __init__(self, bot: "IHatePylanceComplainsPleaseShutUp") -> None:
@@ -37,7 +38,8 @@ class events(commands.Cog):
                 if message.guild is None:
                     return
                 m = await db.fetch(
-                    "SELECT channel_id FROM config WHERE guild_id = $1", message.guild.id
+                    "SELECT channel_id FROM config WHERE guild_id = $1",
+                    message.guild.id,
                 )
                 try:
                     if not message.channel.id == int(m[0]["channel_id"]):
@@ -142,15 +144,16 @@ class events(commands.Cog):
                             current_count[0]["count_number"],
                             ctx.guild.id,
                         )
-                    current_highest_chain = await db.fetch(
-                        "SELECT * FROM counting"
-                    )
+                    current_highest_chain = await db.fetch("SELECT * FROM counting")
                     first_rank = sorted(
                         current_highest_chain,
                         key=lambda x: x["longest_chain"],
                         reverse=True,
                     )[0]
-                    if first_rank["longest_chain"] < previous_count[0]["count_number"] + 1:
+                    if (
+                        first_rank["longest_chain"]
+                        < previous_count[0]["count_number"] + 1
+                    ):
                         await ctx.send(
                             embed=discord.Embed(
                                 title=f"This server has broke global streak that was made by {await self.bot.fetch_guild(first_rank['guild_id'])}",
@@ -251,15 +254,16 @@ class events(commands.Cog):
                             previous_count[0]["count_number"] + 1,
                             ctx.guild.id,
                         )
-                    current_highest_chain = await db.fetch(
-                        "SELECT * FROM counting"
-                    )
+                    current_highest_chain = await db.fetch("SELECT * FROM counting")
                     first_rank = sorted(
                         current_highest_chain,
                         key=lambda x: x["longest_chain"],
                         reverse=True,
                     )[0]
-                    if first_rank["longest_chain"] < previous_count[0]["count_number"] + 1:
+                    if (
+                        first_rank["longest_chain"]
+                        < previous_count[0]["count_number"] + 1
+                    ):
                         await ctx.send(
                             embed=discord.Embed(
                                 title=f"This server has broke global streak that was made by {await self.bot.fetch_guild(first_rank['guild_id'])}",

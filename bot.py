@@ -1,5 +1,5 @@
 try:
-    import uvloop # type: ignore
+    import uvloop  # type: ignore
 
     uvloop.install()
 except (ImportError, ModuleNotFoundError):
@@ -22,6 +22,7 @@ import subprocess
 import traceback
 
 from server import start
+
 # from sql.sql import EasySQL
 
 formatting = logging.Formatter("[%(asctime)s] - [%(levelname)s] [%(name)s] %(message)s")
@@ -47,12 +48,13 @@ log.addHandler(f)
 
 logging.getLogger("discord").setLevel(logging.WARNING)  # mute
 
+
 class IHatePylanceComplainsPleaseShutUp(commands.AutoShardedBot):
     log: logging.Logger
     version_: str
     db: asyncpg.Pool
     start_time: datetime.datetime
-    
+
 
 bot = IHatePylanceComplainsPleaseShutUp(
     command_prefix="a!",
@@ -131,7 +133,7 @@ else:
 ssl_object = ssl.create_default_context()
 ssl_object.check_hostname = False
 ssl_object.verify_mode = ssl.CERT_NONE
-args["ssl"] = ssl_object # type: ignore
+args["ssl"] = ssl_object  # type: ignore
 
 
 @bot.event
@@ -152,13 +154,13 @@ async def main():
         while not started:
             async with bot:
                 try:
-                    bot.db = await asyncpg.create_pool(**args) # type: ignore
+                    bot.db = await asyncpg.create_pool(**args)  # type: ignore
                 except ConnectionError:
                     log.fatal("Failed to connect to database")
                     log.info("Trying to remove SSL context")
-                    args["ssl"] = None # type: ignore
+                    args["ssl"] = None  # type: ignore
                     try:
-                        bot.db = await asyncpg.create_pool(**args) # type: ignore
+                        bot.db = await asyncpg.create_pool(**args)  # type: ignore
                     except ConnectionError:
                         log.exception("Failed to connect to database")
                         log.fatal("Exiting...")
