@@ -331,5 +331,5 @@ class events(commands.Cog):
             raise e
 
 
-async def setup(bot: commands.Bot):
+async def setup(bot: "IHatePylanceComplainsPleaseShutUp"):
     await bot.add_cog(events(bot))
