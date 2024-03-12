@@ -299,7 +299,9 @@ class Help(commands.Cog):
     @app_commands.command(
         name="help",
     )
-    async def help(self, interaction: discord.Interaction, *, command: str | None = None):
+    async def help(
+        self, interaction: discord.Interaction, *, command: str | None = None
+    ):
         """Shows help about the bot, a command, or a category."""
         context = await self.bot.get_context(interaction)
         if command is not None:

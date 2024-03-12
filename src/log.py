@@ -1,9 +1,11 @@
+import typing
+
 import discord
 from discord.ext import commands
-import typing
 
 if typing.TYPE_CHECKING:
     from ..bot import IHatePylanceComplainsPleaseShutUp
+
 
 class Log(commands.Cog, name="Logs"):
     """

@@ -1,10 +1,13 @@
+import typing
+
 import discord
 from discord.ext import commands
-import typing
+
 from .utils import stuffs
 
 if typing.TYPE_CHECKING:
     from ..bot import IHatePylanceComplainsPleaseShutUp
+
 
 class setup_(commands.Cog, name="Setup"):
     """
