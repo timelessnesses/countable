@@ -233,6 +233,8 @@ class PaginatedHelpCommand(commands.HelpCommand):
                 continue
 
             cog = bot.get_cog(name)
+            if cog is None:
+                continue
             all_commands[cog] = sorted(children, key=lambda c: c.qualified_name)
 
         menu = HelpMenu(FrontPageSource(), ctx=self.context)
@@ -291,13 +293,13 @@ class Help(commands.Cog):
     def display_emoji(self) -> discord.PartialEmoji:
         return discord.PartialEmoji(name="\N{WHITE QUESTION MARK ORNAMENT}")
 
-    def cog_unload(self):
+    async def cog_unload(self):
         self.bot.help_command = self.old_help_command
 
     @app_commands.command(
         name="help",
     )
-    async def help(self, interaction: discord.Interaction, *, command: str = None):
+    async def help(self, interaction: discord.Interaction, *, command: str | None = None):
         """Shows help about the bot, a command, or a category."""
         context = await self.bot.get_context(interaction)
         if command is not None:

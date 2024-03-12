@@ -58,8 +58,7 @@ class IHatePylanceComplainsPleaseShutUp(commands.AutoShardedBot):
 
 bot = IHatePylanceComplainsPleaseShutUp(
     command_prefix="a!",
-    intents=discord.Intents.all(),
-    owner_ids=[467718535897022479, 890913140278181909],
+    intents=discord.Intents.all()
 )
 bot.log = log
 

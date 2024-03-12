@@ -1,15 +1,17 @@
 import discord
 from discord.ext import commands
-
+import typing
 from .utils import stuffs
 
+if typing.TYPE_CHECKING:
+    from ..bot import IHatePylanceComplainsPleaseShutUp
 
 class setup_(commands.Cog, name="Setup"):
     """
     Alphabet's config command group
     """
 
-    def __init__(self, bot: commands.Bot) -> None:
+    def __init__(self, bot: "IHatePylanceComplainsPleaseShutUp") -> None:
         self.bot = bot
 
     @property
@@ -22,6 +24,8 @@ class setup_(commands.Cog, name="Setup"):
         """
         Setup the alphabet counter
         """
+        if not ctx.guild:
+            return
         is_setupped = await self.bot.db.fetch(
             "SELECT * FROM config WHERE guild_id = $1", ctx.guild.id
         )
@@ -76,7 +80,7 @@ class setup_(commands.Cog, name="Setup"):
         ]
         answers = {}
         a = None
-        channel = None
+        j = None
         for i in ask:
             a = await ctx.send(
                 embed=discord.Embed(
@@ -89,10 +93,14 @@ class setup_(commands.Cog, name="Setup"):
 
             if i == "channel":
                 answers[i] = int(answer.content.strip("<#>"))
-                channel = answer
+                j = answer
             else:
                 answers[i] = True if answer.content.lower() == "true" else False
             await a.delete()
+        if j is not None:
+            channel = j
+        else:
+            return
         await self.bot.db.execute(
             """
             INSERT INTO config (guild_id, is_same_person, already_setupped, channel_id, save_count)
@@ -169,5 +177,5 @@ class setup_(commands.Cog, name="Setup"):
         )
 
 
-async def setup(bot: commands.Bot):
+async def setup(bot: "IHatePylanceComplainsPleaseShutUp"):
     await bot.add_cog(setup_(bot))

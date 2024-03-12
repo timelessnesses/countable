@@ -308,7 +308,7 @@ class FieldPageSource(menus.ListPageSource):
     async def format_page(self, menu, entries): # type: ignore
         self.embed.clear_fields()
 
-        self.embed.description = ""
+        self.embed.description = discord.utils.MISSING
 
         for key, value in entries:
             self.embed.add_field(name=key, value=value, inline=False)

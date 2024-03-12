@@ -21,9 +21,11 @@ class Events(commands.Cog):
         discord_version = discord.__version__
         file = MISSING
         if len(error_message) <= 4096:
-            file = discord.File(io.StringIO(error_message), filename="errorlog.py")
+            file = discord.File(io.BytesIO(error_message.encode()), filename="errorlog.py")
             error_message = "Error is too long consider reading the errorlog.py file."
         if isinstance(error, commands.CommandNotFound):
+            if not ctx.invoked_with:
+                return
             matches = difflib.get_close_matches(ctx.bot.commands, ctx.invoked_with)
             if len(matches) >= 2:
                 await ctx.send(

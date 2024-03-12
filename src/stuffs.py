@@ -15,8 +15,8 @@ class Stuff(
     Miscellaneous commands and stuffs that don't fit anywhere else.
     """
 
-    snaky: discord.User = None
-    timelessnesses: discord.User = None
+    snaky: discord.User
+    timelessnesses: discord.User
 
     def __init__(self, bot):
         self.bot = bot
@@ -49,7 +49,7 @@ class Stuff(
         )
         embed.add_field(
             name="The bot is also open-source!",
-            value="https://github.com/timelessnesses/alphabet-count-bot",
+            value="https://github.com/timelessnesses/countable",
         )
 
         await ctx.send(embed=embed)

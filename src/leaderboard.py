@@ -3,13 +3,17 @@ import string
 import discord
 from discord.ext import commands
 
+import typing
+
+if typing.TYPE_CHECKING:
+    from ..bot import IHatePylanceComplainsPleaseShutUp
 
 class Leaderboard(commands.Cog):
     """
     Get a ranking of the top 10 users/servers!
     """
 
-    def __init__(self, bot: commands.Bot) -> None:
+    def __init__(self, bot: "IHatePylanceComplainsPleaseShutUp") -> None:
         self.bot = bot
 
     @property
@@ -34,16 +38,18 @@ class Leaderboard(commands.Cog):
         )
 
     @commands.hybrid_group()
-    async def leaderboard(self, ctx: commands.Context) -> None:
+    async def leaderboard(self, _: commands.Context) -> None:
         """
         Leaderboard command group
         """
 
     @leaderboard.command()
-    async def by_alphabet_counts(self, ctx: commands.Bot):
+    async def by_alphabet_counts(self, ctx: commands.Context):
         """
         Get every server's alphabet chain count that wasn't ruined ranked by most to the least in top 10!
         """
+        if not ctx.guild:
+            return
         await ctx.defer()
         servers = sorted(
             await self.bot.db.fetch("SELECT * FROM counting"),
@@ -69,6 +75,8 @@ class Leaderboard(commands.Cog):
                 value=f"{server['count_number']} chains. (Currently at character {self.column(server['count_number'])})",
                 inline=False,
             )
+        i_ = -1
+        server_ = {}
         for i, server in enumerate(all_guilds):
             if server["guild_id"] == ctx.guild.id:
                 i_ = i
@@ -105,6 +113,8 @@ class Leaderboard(commands.Cog):
                 value=f"{user['alphabet_counts']} letters.",
                 inline=False,
             )
+        i_ = -1
+        user_ = {}
         for i, user in enumerate(all_users):
             if user["user_id"] == ctx.author.id:
                 i_ = i
@@ -123,6 +133,8 @@ class Leaderboard(commands.Cog):
         """
         Get every server's alphabet chain count that's ruined ranked by most to the least in top 10!
         """
+        if not ctx.guild:
+            return
         await ctx.defer()
         servers = sorted(
             await self.bot.db.fetch("SELECT * FROM counting"),
@@ -148,6 +160,8 @@ class Leaderboard(commands.Cog):
                 value=f"{server['longest_chain']} characters. (Currently at character {self.column(server['longest_chain'])})",
                 inline=False,
             )
+        i_ = -1
+        server_ = {}
         for i, server in enumerate(all_guilds):
             if int(server["guild_id"]) == ctx.guild.id:
                 i_ = i
@@ -162,5 +176,5 @@ class Leaderboard(commands.Cog):
         await ctx.send(embed=embed)
 
 
-async def setup(bot: commands.Bot) -> None:
+async def setup(bot: "IHatePylanceComplainsPleaseShutUp") -> None:
     await bot.add_cog(Leaderboard(bot))

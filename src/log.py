@@ -1,13 +1,16 @@
 import discord
 from discord.ext import commands
+import typing
 
+if typing.TYPE_CHECKING:
+    from ..bot import IHatePylanceComplainsPleaseShutUp
 
 class Log(commands.Cog, name="Logs"):
     """
     Get ruined logs here!
     """
 
-    def __init__(self, bot: commands.Bot) -> None:
+    def __init__(self, bot: "IHatePylanceComplainsPleaseShutUp") -> None:
         self.bot = bot
 
     @property
@@ -19,19 +22,22 @@ class Log(commands.Cog, name="Logs"):
         """
         Get the log of a specific log id
         """
+        if not ctx.guild:
+            return
         log = await self.bot.db.fetch(
             "SELECT * FROM logger WHERE guild_id = $1 AND id = $2",
             ctx.guild.id,
             log_id,
         )
         if not log:
-            return await ctx.send(
+            await ctx.send(
                 embed=discord.Embed(
                     title="Log not found",
                     description="Log not found",
                     colour=discord.Colour.red(),
                 )
             )
+            return
         selected = log[0]
         embed = discord.Embed(
             title="Log info of {}".format(selected["id"]),
@@ -52,5 +58,5 @@ class Log(commands.Cog, name="Logs"):
         await ctx.send(embed=embed)
 
 
-async def setup(bot: commands.Bot):
+async def setup(bot: "IHatePylanceComplainsPleaseShutUp"):
     await bot.add_cog(Log(bot))
