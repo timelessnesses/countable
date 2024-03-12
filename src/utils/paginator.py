@@ -218,9 +218,7 @@ class Pages(discord.ui.View):
         await self.show_checked_page(interaction, self.current_page - 1)
 
     @discord.ui.button(label="Current", style=discord.ButtonStyle.grey, disabled=True)
-    async def go_to_current_page(
-        self, _: discord.Interaction, __: discord.ui.Button
-    ):
+    async def go_to_current_page(self, _: discord.Interaction, __: discord.ui.Button):
         pass
 
     @discord.ui.button(label="Next", style=discord.ButtonStyle.blurple)
@@ -290,9 +288,7 @@ class Pages(discord.ui.View):
                 await self.show_checked_page(interaction, page - 1)
 
     @discord.ui.button(label="Quit", style=discord.ButtonStyle.red)
-    async def stop_pages(
-        self, interaction: discord.Interaction, _: discord.ui.Button
-    ):
+    async def stop_pages(self, interaction: discord.Interaction, _: discord.ui.Button):
         """stops the pagination session."""
 
         await interaction.response.defer()
