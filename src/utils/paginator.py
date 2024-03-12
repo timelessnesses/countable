@@ -184,7 +184,7 @@ class Pages(discord.ui.View):
     async def start(self) -> None:
         if (
             self.check_embeds
-            and not self.ctx.channel.permissions_for(self.ctx.me).embed_links
+            and not self.ctx.channel.permissions_for(self.ctx.bot).embed_links
         ):
             await self.ctx.send(
                 "Bot does not have embed links permission in this channel."
@@ -239,7 +239,7 @@ class Pages(discord.ui.View):
 
         # The call here is safe because it's guarded by skip_if
 
-        await self.show_page(interaction, self.source.get_max_pages() - 1)
+        await self.show_page(interaction, self.source.get_max_pages() - 1) # type: ignore
 
     @discord.ui.button(label="Skip to page...", style=discord.ButtonStyle.grey)
     async def numbered_page(
@@ -309,10 +309,10 @@ class FieldPageSource(menus.ListPageSource):
 
         self.embed = discord.Embed(colour=discord.Colour.blurple())
 
-    async def format_page(self, menu, entries):
+    async def format_page(self, menu, entries): # type: ignore
         self.embed.clear_fields()
 
-        self.embed.description = discord.Embed.Empty
+        self.embed.description = ""
 
         for key, value in entries:
             self.embed.add_field(name=key, value=value, inline=False)
@@ -338,7 +338,7 @@ class TextPageSource(menus.ListPageSource):
 
         super().__init__(entries=pages.pages, per_page=1)
 
-    async def format_page(self, menu, content):
+    async def format_page(self, menu, content): # type: ignore
         maximum = self.get_max_pages()
 
         if maximum > 1:
@@ -347,7 +347,7 @@ class TextPageSource(menus.ListPageSource):
 
 
 class SimplePageSource(menus.ListPageSource):
-    async def format_page(self, menu, entries):
+    async def format_page(self, menu, entries): # type: ignore
         pages = []
 
         for index, entry in enumerate(entries, start=menu.current_page * self.per_page):
