@@ -5,7 +5,7 @@ import discord
 import psutil
 from discord.ext import commands
 
-from . import utils
+from .utils import time
 
 
 class Stuff(
@@ -79,7 +79,7 @@ class Stuff(
         embed.add_field(name="Disk", value=f"{psutil.disk_usage('/').percent}%")
         embed.add_field(
             name="Uptime",
-            value=f"{utils.time.human_timedelta(datetime.utcnow(), source=self.bot.start_time)}",
+            value=f"{time.human_timedelta(datetime.utcnow(), source=self.bot.start_time)}",
         )
         embed.add_field(name="Python", value=f"{platform.python_version()}")
         embed.add_field(name="Discord.py", value=f"{discord.__version__}")
