@@ -237,7 +237,7 @@ class Pages(discord.ui.View):
 
         # The call here is safe because it's guarded by skip_if
 
-        await self.show_page(interaction, self.source.get_max_pages() - 1) # type: ignore
+        await self.show_page(interaction, self.source.get_max_pages() - 1)  # type: ignore
 
     @discord.ui.button(label="Skip to page...", style=discord.ButtonStyle.grey)
     async def numbered_page(
@@ -305,7 +305,7 @@ class FieldPageSource(menus.ListPageSource):
 
         self.embed = discord.Embed(colour=discord.Colour.blurple())
 
-    async def format_page(self, menu, entries): # type: ignore
+    async def format_page(self, menu, entries):  # type: ignore
         self.embed.clear_fields()
 
         self.embed.description = ""
@@ -334,7 +334,7 @@ class TextPageSource(menus.ListPageSource):
 
         super().__init__(entries=pages.pages, per_page=1)
 
-    async def format_page(self, menu, content): # type: ignore
+    async def format_page(self, menu, content):  # type: ignore
         maximum = self.get_max_pages()
 
         if maximum > 1:
@@ -343,7 +343,7 @@ class TextPageSource(menus.ListPageSource):
 
 
 class SimplePageSource(menus.ListPageSource):
-    async def format_page(self, menu, entries): # type: ignore
+    async def format_page(self, menu, entries):  # type: ignore
         pages = []
 
         for index, entry in enumerate(entries, start=menu.current_page * self.per_page):
